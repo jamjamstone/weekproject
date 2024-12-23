@@ -10,7 +10,7 @@ namespace weekproject
     {
         string _monsterName;
         Status _monsterStatus;
-        Projectile _monsterProjectile;
+        Projectile _monsterProjectile= new Projectile();
         public string MonsterName
         {
             get { return _monsterName; }
@@ -28,7 +28,7 @@ namespace weekproject
         }
         virtual public void MonsterAttack()
         {
-
+            
         }
     }
 }

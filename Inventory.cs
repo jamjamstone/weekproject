@@ -15,6 +15,11 @@ namespace weekproject
             get { return _getGold; }
             set { _getGold = value; }
         }
+        public List<Item> getItems
+        {
+            get { return _getItems; }
+            set { _getItems = value; }
+        }
         public void AddItem(Item getItem)// 인벤토리에 아이템 추가
         {
             _getItems?.Add(getItem);
@@ -35,6 +40,18 @@ namespace weekproject
             }
         }
 
+        public Status SumStatus()
+        {
+            Status sumStatus= new Status();
+            foreach (Item item in _getItems)
+            {
+                sumStatus.HP += item.status.HP;
+                sumStatus.def += item.status.def;
+                sumStatus.ATK += item.status.ATK;
+
+            }
+            return sumStatus;
+        }
 
 
         }

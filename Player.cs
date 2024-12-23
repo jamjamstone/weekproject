@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,7 +14,7 @@ namespace weekproject
         Status _playerStatus;
         int _playerX;
         int _playerY;
-        Projectile _playerProjectile;
+        Projectile _playerProjectile=new Projectile();
         public Player()
         {
             _playerStatus = new Status();
@@ -52,13 +53,52 @@ namespace weekproject
         public void PlayerAddItemToInventory(Item item)
         {
             _inventory.AddItem(item);
-            _playerStatus = item.;
+            _playerStatus.HP += _inventory.SumStatus().HP;
+            _playerStatus.def += _inventory.SumStatus().def;
+            _playerStatus.ATK += _inventory.SumStatus().ATK;
+            //_playerStatus
         }
         public void PlayerSellItemFromInventory(int index)
         {
+            _playerStatus.ATK -= _inventory.getItems[index].status.ATK;
+            _playerStatus.HP -= _inventory.getItems[index].status.HP;
+            _playerStatus.def -= _inventory.getItems[index].status.def;
             _inventory.RemoveItem(index);
         }
+        public void PlayerAddGoldToInventory(int gold)
+        {
+            _inventory.getGold += gold;
+        }
 
+        public void Jump()
+        {
+            Stopwatch sw = Stopwatch.StartNew();
+            sw.Start();
+            for (int i = 0; i < 3; i++)
+            {
+                while (sw.ElapsedMilliseconds < 500)
+                {
+
+                }
+
+                _playerY += 1;
+                sw.Restart();
+            }
+            sw.Stop();
+        }
+        public void Move(string direction)//이동제한조건을 여기에 넣을까 딴데 넣을까
+        {
+            if(direction == "left")
+            {
+                _playerX -= 1;
+
+
+
+            }else if(direction == "right")
+            {
+                _playerX += 1;
+            }
+        }
 
     }
 }

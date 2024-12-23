@@ -23,7 +23,8 @@ namespace weekproject
         public void SellItemToPlayer(Player player,int index)
         {
             player.PlayerAddItemToInventory(_sellingItems[index]);
-             
+            player.Inventory.getGold -= _sellingItems[index].price;
+
         }
         public void BuyItemFromPlayer(Player player,int index)
         {
@@ -62,9 +63,32 @@ namespace weekproject
             }
 
         }
+        public bool isStageEnd(ConsoleKeyInfo inputKey)
+        {
+            if(inputKey.Key == ConsoleKey.Q)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
         public void DrawMap()
         {
-
+            Console.WriteLine(Program.merchant);
+            Console.WriteLine("□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□");
+            Console.WriteLine("□                                                                                                            □");
+            Console.WriteLine("□                                                                                                            □");
+            Console.WriteLine("□                                                                                                            □");
+            Console.WriteLine("□                                                                                                            □");
+            Console.WriteLine("□                                                                                                            □");
+            Console.WriteLine("□                                                                                                            □");
+            Console.WriteLine("□                                                                                                            □");
+            Console.WriteLine("□                                                                                                            □");
+            Console.WriteLine("□                                                                                                            □");
+            Console.WriteLine("□                                                                                                            □");
+            Console.WriteLine("□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□");
         }
-    }
+    }//end
 }

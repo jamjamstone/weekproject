@@ -1,0 +1,70 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace weekproject
+{
+    class ShopStage: Stage, IMapDrawing
+    {
+        List<Item> _sellingItems;
+        int _shopGold;
+        public int ShopGold
+        {
+            get { return _shopGold; }
+            set { _shopGold = value; }
+        }
+        public ShopStage()
+        {
+            _sellingItems = new List<Item>();
+            _shopGold = 1000;
+        }
+        public void SellItemToPlayer(Player player,int index)
+        {
+            player.PlayerAddItemToInventory(_sellingItems[index]);
+             
+        }
+        public void BuyItemFromPlayer(Player player,int index)
+        {
+            
+            if (_shopGold > player.Inventory.getGold)
+            {
+                int temp = _shopGold;
+                _shopGold = _shopGold - player.Inventory.getGold;
+                player.Inventory.getGold = player.Inventory.getGold + temp;
+                player.PlayerSellItemFromInventory(index);
+            }
+            else
+            {
+                while (true)
+                {
+                    Console.WriteLine("판매하려고 하는 물품이 상점이 보유한 골드보다 비쌉니다 정말로 파시겠습니까?");
+                    string tempString = Console.ReadLine();
+                    if (tempString == "y")
+                    {
+                        player.Inventory.getGold = player.Inventory.getGold + _shopGold;
+                        _shopGold = 0;
+                        player.PlayerSellItemFromInventory(index);
+                        break;
+
+                    }
+                    else if (tempString == "n")
+                    {
+                        Console.WriteLine("판매를 취소하였습니다.");
+                        break;
+                    }
+                    else
+                    {
+                        Console.WriteLine("잘못된 입력입니다. 다시 입력해 주세요");
+                    }
+                }
+            }
+
+        }
+        public void DrawMap()
+        {
+
+        }
+    }
+}

@@ -13,15 +13,26 @@ namespace weekproject
         string _playerName;
         Inventory _inventory;
         Status _playerStatus;
-        int _playerX;
-        int _playerY;
+        int _playerX=26;
+        int _playerY=26;
+        Projectile[] _projectiles= new Projectile[30];
         Projectile _playerProjectile=new Projectile();
-
+        
         public Player()
         {
             _playerStatus = new Status();
-            _playerProjectile = new Projectile();
+            //_projectiles = new List<Projectile>();
             _inventory = new Inventory();
+            //
+            _playerProjectile = new Projectile(1,1,2);
+            _playerProjectile.isShot = false;
+            //
+            for(int i = 0; i < _projectiles.Length; i++)
+            {
+                _projectiles[i] = new Projectile(1,1,2);
+                //_projectiles[i] = _playerProjectile;
+                _projectiles[i].isShot = false;
+            }
 
         }
         public Player(string name):this()
@@ -58,11 +69,36 @@ namespace weekproject
             get { return _playerProjectile; }
             set { _playerProjectile = value; }
         }
-        public void PlayerAttack()//projectile을 이용해서 공격하는 함수
+        public Projectile[] projectiles
         {
-            _playerProjectile.Dmg += _playerStatus.ATK;
-            _playerProjectile.ProjectileShoot();
-            _playerProjectile.Dmg -= _playerStatus.ATK;
+            get { return _projectiles; }
+            set { projectiles = value; }
+        }
+        public Projectile PlayerAttack()//projectile을 이용해서 공격하는 함수 // 구현중
+        {
+            //_playerProjectile.Dmg += _playerStatus.ATK;
+            //_playerProjectile.ProjectileShoot();
+            //_playerProjectile.Dmg -= _playerStatus.ATK;
+            for (int i = 0; i < projectiles.Length; i++)
+            {
+                if (projectiles[i].isShot)
+                {
+                    continue;
+                }
+                else
+                {
+                    projectiles[i].isShot = true;
+                    projectiles[i].projY = _playerY;
+                    
+                    projectiles[i].projX = _playerX;
+                    
+                    return projectiles[i];   
+                }
+            }
+            return null;
+
+
+
         }
         public void PlayerAddItemToInventory(Item item)//아이템을 사면서 스탯 변화 적용
         {
@@ -93,7 +129,7 @@ namespace weekproject
             _inventory.getGold += gold;
         }
 
-        public void Jump()
+        public void Jump()//점프가진행되는동안 멈춤 좀 더 부드럽게 되는게 필요
         {
             Stopwatch sw = Stopwatch.StartNew();
             sw.Start();
@@ -109,18 +145,18 @@ namespace weekproject
             }
             sw.Stop();
         }
-        public void Move(string direction)//이동제한조건을 여기에 넣을까 딴데 넣을까
+        public void Move(string direction)//이동제한조건을 여기에 넣을까 딴데 넣을까-> 필드를 인자로 가지고 있지 않으니 이동 조건은 스테이지에 달자
         {
             if(direction == "left")
             {
                 _playerX -= 1;
-                _playerProjectile.IsShotLeft = true;
+                //_playerProjectile.IsShotLeft = true;
 
 
             }else if(direction == "right")
             {
                 _playerX += 1;
-                _playerProjectile.IsShotLeft = false;
+                //_playerProjectile.IsShotLeft = false;
             }
         }
 

@@ -8,12 +8,14 @@ namespace weekproject
 {
     class Projectile
     {
-        int _dmg;
-        int _speed;
-        int _interval;
-        bool _isShotLeft;
-        int _projectileX;
-        int _projectileY;
+        protected int _dmg;
+        protected int _speed;
+        //protected int _interval;
+        protected bool _isShotLeft;
+        protected int _projectileX;
+        protected int _projectileY;
+        protected bool _isShot;
+        
         public Projectile()
         {
 
@@ -22,7 +24,7 @@ namespace weekproject
         {
             _dmg = dmg;
             _speed = speed;
-            _interval = interval;
+            //_interval = interval;
         }
         public int projX
         {
@@ -49,16 +51,22 @@ namespace weekproject
             get { return _speed; }
             set { _speed = value; }
         }
-        public int Interval
+       // public int Interval
+       // {
+       //     get { return _interval; }
+       //     set { _interval = value; }
+       // }
+        public bool isShot
         {
-            get { return _interval; }
-            set { _interval = value; }
+            get { return _isShot; }
+            set { _isShot = value; }
+        
         }
-
         public virtual void ProjectileShoot()//기본
         {
             if (_isShotLeft) 
             {
+
                 _projectileX -= _speed;
 
 

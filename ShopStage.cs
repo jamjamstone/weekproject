@@ -20,6 +20,12 @@ namespace weekproject
             _sellingItems = new List<Item>();
             _shopGold = 1000;
         }
+        public void AddItemToSellList(Item item)
+        {
+            _sellingItems.Add(item);
+        }
+
+
         public void SellItemToPlayer(Player player,int index)
         {
             if (player == null) { return; }
@@ -78,14 +84,14 @@ namespace weekproject
                 return false;
             }
         }
-        public void DrawMap()
+        public override void DrawMap()
         {
             
         }
 
         public void SetField()
         {
-            for(int )
+            //for(int )
         }
     }//end
 }

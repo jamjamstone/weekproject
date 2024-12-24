@@ -41,6 +41,14 @@ namespace weekproject
             get { return _description; }
             set { _description = value; }
         }
+
+        public void SetItemStatus(int hp, int def, int dmg)
+        {
+            _status.def = def;
+            _status.HP = hp;
+            _status.ATK = dmg; 
+        }
+
     }
 
     class ItemChangeProj:Item
@@ -61,7 +69,7 @@ namespace weekproject
             _projectile=player.PlayerProjectile;
             player.PlayerProjectile = tem;
         }
-
+        
     }
 
 }

@@ -38,6 +38,10 @@ namespace weekproject
                 Console.WriteLine($"{i}: {item.itemName}");
                 i++;
             }
+            while (Console.ReadKey() == null)
+            {
+
+            };
         }
 
         public Status SumStatus()

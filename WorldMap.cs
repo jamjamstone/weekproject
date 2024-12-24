@@ -45,7 +45,11 @@ namespace weekproject
     {
         MapNode<T> _startStage;
 
-
+        public MapNode<T> StartStage
+        {
+            get { return _startStage; }
+            set { _startStage = value; }
+        }
         public WorldMap()
         {
             _startStage = new MapNode<T>();
@@ -67,7 +71,7 @@ namespace weekproject
             current.Nodes.Add(new MapNode<T>(stage, current.level + 1));
 
         }
-        public void RemoveNode(MapNode<T> node) // 구현중
+        public void RemoveNode(MapNode<T> node) // 구현중....인데 이거 필요함? 기능에는 없어도 될거 같은데
         {
             Stack<MapNode<T>> visitedNode = new Stack<MapNode<T>>();
             MapNode<T> current = _startStage;

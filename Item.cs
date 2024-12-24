@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 
 namespace weekproject
 {
-    abstract class Item
+    class Item
     {
         string _itemName;
         int _price;
         Status _status;
+        string _description;
 
         public Item() 
         {
@@ -35,9 +36,32 @@ namespace weekproject
             get { return _price; }
             set { _price = value; }
         }
-
+        public string description
+        {
+            get { return _description; }
+            set { _description = value; }
+        }
     }
 
-    
+    class ItemChangeProj:Item
+    {
+        Projectile _projectile;
+        public Projectile projectile
+        {
+            get { return _projectile; }
+            set { _projectile = value; }
+        }
+        public ItemChangeProj(int dmg, int speed, int interval)
+        {
+            _projectile = new Projectile(dmg, speed, interval);
+        }
+        public void ChangePlayerProjectile(Player player)
+        {
+            Projectile tem = _projectile;
+            _projectile=player.PlayerProjectile;
+            player.PlayerProjectile = tem;
+        }
+
+    }
 
 }

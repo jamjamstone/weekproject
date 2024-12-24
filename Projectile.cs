@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace weekproject
 {
-    internal class Projectile
+    class Projectile
     {
         int _dmg;
         int _speed;
@@ -14,6 +14,16 @@ namespace weekproject
         bool _isShotLeft;
         int _projectileX;
         int _projectileY;
+        public Projectile()
+        {
+
+        }
+        public Projectile(int dmg, int speed, int interval)
+        {
+            _dmg = dmg;
+            _speed = speed;
+            _interval = interval;
+        }
         public int projX
         {
             get { return _projectileX; }
@@ -44,5 +54,57 @@ namespace weekproject
             get { return _interval; }
             set { _interval = value; }
         }
+
+        public virtual void ProjectileShoot()//기본
+        {
+            if (_isShotLeft) 
+            {
+                _projectileX -= _speed;
+
+
+            }
+            else
+            {
+                _projectileX += _speed;
+            }
+        }
+        
+        
+
+
+
+    }//Projectile End
+
+
+    class ProjectileWeegle:Projectile
+    {
+        public override void ProjectileShoot()
+        {
+            if (IsShotLeft)
+            {
+                if (Program.isProjectileWeegleUp)//총알이 위로 휠때
+                {
+                    projX = projX - Speed;
+                    projY = projY + Speed;
+                }
+                else//총알이 아래로 휠때
+                {
+                    projX = projX - Speed;
+                    projY = projY - Speed;
+                }
+            }
+            else
+            {
+                if (Program.isProjectileWeegleUp)
+                {
+                    projX = projX + Speed;
+                    projY = projY + Speed;
+                }
+            }
+        }
     }
+
+
+
+
 }

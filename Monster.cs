@@ -28,7 +28,14 @@ namespace weekproject
         }
         virtual public void MonsterAttack()
         {
-            
+            _monsterProjectile.ProjectileShoot();
         }
+
+        public void MonsterHit(Projectile proj)
+        {
+            _monsterStatus.HP = _monsterStatus.HP - (proj.Dmg - _monsterStatus.def);
+        }
+
+
     }
 }

@@ -22,11 +22,15 @@ namespace weekproject
         }
         public void SellItemToPlayer(Player player,int index)
         {
+            if (player == null) { return; }
+            
             player.PlayerAddItemToInventory(_sellingItems[index]);
             player.Inventory.getGold -= _sellingItems[index].price;
 
+            _sellingItems.RemoveAt(index);
+
         }
-        public void BuyItemFromPlayer(Player player,int index)
+        public void BuyItemFromPlayer(Player player,int index)//말그대로 구매기능만 판매 대화나 판매가능 여부는 다른 함수에 구현하기
         {
             
             if (_shopGold > player.Inventory.getGold)
@@ -76,19 +80,12 @@ namespace weekproject
         }
         public void DrawMap()
         {
-            Console.WriteLine(Program.merchant);
-            Console.WriteLine("□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□");
-            Console.WriteLine("□                                                                                                            □");
-            Console.WriteLine("□                                                                                                            □");
-            Console.WriteLine("□                                                                                                            □");
-            Console.WriteLine("□                                                                                                            □");
-            Console.WriteLine("□                                                                                                            □");
-            Console.WriteLine("□                                                                                                            □");
-            Console.WriteLine("□                                                                                                            □");
-            Console.WriteLine("□                                                                                                            □");
-            Console.WriteLine("□                                                                                                            □");
-            Console.WriteLine("□                                                                                                            □");
-            Console.WriteLine("□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□");
+            
+        }
+
+        public void SetField()
+        {
+            for(int )
         }
     }//end
 }

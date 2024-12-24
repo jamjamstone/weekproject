@@ -11,6 +11,8 @@ namespace weekproject
         protected string _stageName;
         protected int[,] _fieldInfo = new int[50, 50];
         protected List<Monster> _monsters;
+        protected List<Projectile> _projects;
+        
         public Stage()
         {
             _monsters = new List<Monster>();

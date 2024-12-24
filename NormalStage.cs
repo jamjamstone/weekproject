@@ -14,21 +14,21 @@ namespace weekproject
             get { return _rewardGold; }
             set { _rewardGold = value; }
         }
-        public void DrawMap()
+        public void DrawMap()//x,y가 일반적인 좌표처럼 작동!
         {
-            for (int i = 0; i < _fieldInfo.Length; i++ )
+            for (int i = _fieldInfo.GetLength(1); i >=0 ; i-- )
             {
-                for (int j = _fieldInfo.GetLength(1);j>=0; j--) 
+                for (int j = 0;j<_fieldInfo.GetLength(0); j++) 
                 {
                     switch (_fieldInfo[j, i]) 
                     {
                         case 0:
                             Console.WriteLine();
                             break;
-                            case 1:
+                        case 1:
                             Console.WriteLine();
                             break;
-                            case 2:
+                        case 2:
                             Console.WriteLine();
                             break;
                         case 3:
@@ -55,7 +55,7 @@ namespace weekproject
 
         public void EndOfStage(Player player)
         {
-
+            player.Inventory.getGold += _rewardGold;
         }
 
 

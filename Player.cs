@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,6 +16,7 @@ namespace weekproject
         int _playerX;
         int _playerY;
         Projectile _playerProjectile=new Projectile();
+
         public Player()
         {
             _playerStatus = new Status();
@@ -46,23 +48,44 @@ namespace weekproject
             get { return _inventory; } 
             set { _inventory = value; }
         }
+        public Status PlayerStatus
+        {
+            get { return _playerStatus; }
+            set { _playerStatus = value; }
+        }
+        public Projectile PlayerProjectile
+        {
+            get { return _playerProjectile; }
+            set { _playerProjectile = value; }
+        }
         public void PlayerAttack()//projectile을 이용해서 공격하는 함수
         {
-
+            _playerProjectile.Dmg += _playerStatus.ATK;
+            _playerProjectile.ProjectileShoot();
+            _playerProjectile.Dmg -= _playerStatus.ATK;
         }
-        public void PlayerAddItemToInventory(Item item)
+        public void PlayerAddItemToInventory(Item item)//아이템을 사면서 스탯 변화 적용
         {
             _inventory.AddItem(item);
             _playerStatus.HP += _inventory.SumStatus().HP;
             _playerStatus.def += _inventory.SumStatus().def;
             _playerStatus.ATK += _inventory.SumStatus().ATK;
+            if (item is ItemChangeProj)
+            {
+                (item as ItemChangeProj).ChangePlayerProjectile(this);
+            }
             //_playerStatus
         }
-        public void PlayerSellItemFromInventory(int index)
+        public void PlayerSellItemFromInventory(int index)//아이템을 팔면서 스탯변화 적용
         {
             _playerStatus.ATK -= _inventory.getItems[index].status.ATK;
             _playerStatus.HP -= _inventory.getItems[index].status.HP;
             _playerStatus.def -= _inventory.getItems[index].status.def;
+            if(_inventory.getItems[index] is ItemChangeProj)
+            {
+                (_inventory.getItems[index] as ItemChangeProj).ChangePlayerProjectile(this);
+            }
+
             _inventory.RemoveItem(index);
         }
         public void PlayerAddGoldToInventory(int gold)
@@ -91,12 +114,13 @@ namespace weekproject
             if(direction == "left")
             {
                 _playerX -= 1;
-
+                _playerProjectile.IsShotLeft = true;
 
 
             }else if(direction == "right")
             {
                 _playerX += 1;
+                _playerProjectile.IsShotLeft = false;
             }
         }
 

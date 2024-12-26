@@ -20,6 +20,7 @@ namespace weekproject
         {
             _stage= stage;
             _level = level;
+            
         }
         public List<MapNode<T>> Nodes
         {
@@ -54,21 +55,33 @@ namespace weekproject
         {
             _startStage = new MapNode<T>();
         }
-        public void AddNodeRandom(T stage, int layer)//구현완 테스트x
+        public void AddNode(T stage, int layer)//구현완 테스트x
         {
+            int countLayer = 0;
             if (_startStage == null)
             {
                 _startStage = new MapNode<T>(stage, 0);
 
-            }
-            MapNode<T> current = _startStage;
-            while (current.level < layer)
-            {
-                int branchNum = Program.random.Next(0, current.Nodes.Count);
-                current = current.Nodes[branchNum];
 
             }
-            current.Nodes.Add(new MapNode<T>(stage, current.level + 1));
+            else
+            {
+                MapNode<T> current = _startStage;
+                while (countLayer < layer-1)
+                {
+                    
+                    current = current?.Nodes[Program.random.Next(0, current.Nodes.Count)];
+                }
+                if (current.Nodes.Count <= 0)
+                {
+                    current.Nodes.Add(new MapNode<T>(stage, countLayer));
+                }
+                else
+                {
+                    current.Nodes[Program.random.Next(0, current.Nodes.Count)] = new MapNode<T>(stage, layer);//에러
+                }
+            }
+            
 
         }
         public void RemoveNode(MapNode<T> node) // 구현중....인데 이거 필요함? 기능에는 없어도 될거 같은데
@@ -108,7 +121,7 @@ namespace weekproject
 
             int countIndex = 0;
             Console.WriteLine("다음 스테이지를 골라주세요!");
-            foreach(MapNode<T> nextStage in nowStage.Nodes)
+            foreach(MapNode<T> nextStage in nowStage?.Nodes)
             {
 
                 if(nextStage != null)

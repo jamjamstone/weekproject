@@ -56,13 +56,15 @@ namespace weekproject
 
         public override bool isStageEnd()
         {
-            if (_monsters == null)
+
+            foreach (var monster in _monsters)
             {
-                return true;
-            }else
-            {
-                return false;
+                if (monster.MonsterStatus.HP > 0)
+                {
+                    return false;
+                }
             }
+            return true;
         }
 
         public void EndOfStage(Player player)

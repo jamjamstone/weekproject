@@ -14,6 +14,10 @@ namespace weekproject
         //    
         //
         //}
+        //public void CreateWorldMapTree(WorldMap<Stage> worldMap,Stage stage )
+        //{
+        //
+        //}
         public void DetectKey(ConsoleKeyInfo inputKey,Stage stage ,Player player)
         {
             switch (inputKey.Key)
@@ -24,13 +28,14 @@ namespace weekproject
                     return;
                 case ConsoleKey.W:
                     //player.Jump();
-                    if (Program.jumpCount > 0)
+                    if (Program.jumpCount > 0 )//무한점프
                     {
                         Console.WriteLine("점프카운트추가안됨!");
                         break;
                     }
-                    else if(Program.jumpCount==0)
+                    else if(Program.jumpCount==0 && stage.fieldInfo[player.playerX, player.playerY - 1] != 0)
                     {
+                        Console.SetCursorPosition(53, 0);
                         Program.jumpCount = 3;
                         Console.WriteLine("점프카운트 추가");
                     }

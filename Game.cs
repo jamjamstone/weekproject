@@ -341,7 +341,7 @@ namespace weekproject
         public void Play()
         {
 
-            //WorldMap<Stage> worldMap = new WorldMap<Stage>();
+            WorldMap<Stage> worldMap = new WorldMap<Stage>();
             //아이템 설정
             Item[] items = new Item[4];
             Item redSword = new Item("빨강검", 300);
@@ -376,6 +376,9 @@ namespace weekproject
             Stage battle3 = new NormalStage();
             Stage battle4 = new NormalStage();
 
+            Stage Boss1 = new BossStage();
+            Stage Boss2 = new BossStage();
+
             battle1.AddMonster(normalMonster);//1은 튜토리얼 스테이지로 조작법을 맵 위에 뛰울 예정, set커서로 배경그리고 커서 이동시켜서 조작법 출력하면 될듯
             battle1.monsters[0].SetMonsterXY(35, 25);
            // battle1.monsters[0].projectiles[0].Speed = 1;
@@ -388,9 +391,20 @@ namespace weekproject
             SetBaseField(battle2);
             SetBaseField(battle3);
             SetBaseField(battle4);
+            SetBaseField(Boss1);
+            SetBaseField(Boss2);
+            
+            //worldMap.AddNode(battle2, 1);
+            //worldMap.AddNode(battle3, 1);
+            //worldMap.AddNode(battle4, 2);
+            //worldMap.AddNode(shop1, 2);
 
-            Stage Boss1 = new BossStage();
-            Stage Boss2 = new BossStage();
+            
+            //worldMap.AddNodeRandom(battle2, 2);
+            //worldMap.AddNodeRandom(battle3, 2);
+            //worldMap.AddNodeRandom((shop1 as ShopStage), 3);
+            //worldMap.AddNodeRandom(Boss1, 3);
+            
 
             //스테이지설정
 
@@ -414,13 +428,15 @@ namespace weekproject
             Console.WriteLine("플레이어의 이름을 입력해 주세요!");
             Player player = new Player();
             player.playerName = Console.ReadLine();
-            WorldMap <Stage> worldMap = new WorldMap <Stage>();
+            //WorldMap <Stage> worldMap = new WorldMap <Stage>();
             MapNode<Stage> nowMapNode;
             //worldMap.AddNodeRandom();
             MapNode<Stage> battle1Node = new MapNode<Stage>(battle1,0);
             worldMap.StartStage = battle1Node;
             nowMapNode = worldMap.StartStage;
 
+            //nowMapNode.Nodes.Add(new MapNode<Stage>(battle2, 1));
+            //nowMapNode.Nodes.Add(new MapNode<Stage>(shop1, 1));
 
             player.playerX = 1;
             player.playerY = 27; 
@@ -464,9 +480,29 @@ namespace weekproject
                     Console.WriteLine("시간 지남");//debug
                     Program.stopwatch.Restart();
                 }
-                if (nowMapNode.stage.isStageEnd())
+                if (nowMapNode.stage is NormalStage)
                 {
-                    WorldMap<Stage>.NextStageSelect(nowMapNode);
+                    if ((nowMapNode.stage as NormalStage).isStageEnd())
+                    {
+                        WorldMap<Stage>.NextStageSelect(nowMapNode);
+                        Console.WriteLine("스테이지 클리어!");
+                    }
+
+
+                }
+                else if ((nowMapNode.stage is ShopStage))
+                {
+                    if ((nowMapNode.stage as ShopStage).isStageEnd())
+                    {
+                        WorldMap<Stage>.NextStageSelect(nowMapNode);
+                    }
+                }
+                else if ((nowMapNode.stage is BossStage))
+                {
+                    if ((nowMapNode.stage as BossStage).isStageEnd())
+                    {
+                        WorldMap<Stage>.NextStageSelect(nowMapNode);
+                    }
                 }
                 //아닐때 중력 작용
                 //일정 시간마다 몬스터 공격

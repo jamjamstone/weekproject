@@ -14,7 +14,7 @@ namespace weekproject
         //    
         //
         //}
-        public void DetectKey(ConsoleKeyInfo inputKey, Player player)
+        public void DetectKey(ConsoleKeyInfo inputKey,Stage stage ,Player player)
         {
             switch (inputKey.Key)
             {
@@ -24,17 +24,42 @@ namespace weekproject
                     return;
                 case ConsoleKey.W:
                     //player.Jump();
-                    Program.jumpCount = 3;
+                    if (Program.jumpCount > 0)
+                    {
+                        Console.WriteLine("점프카운트추가안됨!");
+                        break;
+                    }
+                    else if(Program.jumpCount==0)
+                    {
+                        Program.jumpCount = 3;
+                        Console.WriteLine("점프카운트 추가");
+                    }
                     break;
                 case ConsoleKey.A:
-                    player.Move("left");
+                    if (stage.fieldInfo[player.playerX - 1, player.playerY] == 0)
+                    {
+                        stage.fieldInfo[player.playerX, player.playerY] = 0;
+                        player.Move("left");
+                        
+                        SetPlayerPositionToField(stage, player);
+                    }
                     break;
                 case ConsoleKey.D:
-                    player.Move("right");
+                    if (stage.fieldInfo[player.playerX + 1, player.playerY] == 0)
+                    {
+                        stage.fieldInfo[player.playerX, player.playerY] = 0;
+                        player.Move("right");
+                        SetPlayerPositionToField(stage,player);
+                    }
+                    
                     break;
                 case ConsoleKey.E:
                     player.Inventory.ShowInventory();
                     Program.stopwatch.Stop();
+                    break;
+                case ConsoleKey.Spacebar:
+                    player.PlayerAttack();
+                    SetPlayerPositionToField(stage, player);
                     break;
                 default:
                     break;
@@ -42,11 +67,40 @@ namespace weekproject
 
             }
         }
+        public void SetPlayerPositionToField(Stage stage, Player player)
+        {
+            stage.fieldInfo[player.playerX, player.playerY] = 2;
+        }
+        public void SetMonsterPositionToField(Stage stage)
+        {
+            foreach (var monster in stage.monsters)
+            {
+                if (monster.MonsterName == "슬라임")
+                {
+                    stage.fieldInfo[monster.monsterX, monster.monsterY] = 4;
+                }
+                else
+                {
+                    stage.fieldInfo[monster.monsterX, monster.monsterY] = 5;
+                }
+            }
+        }
         public void SetWorldMap()
         {
 
         }
-
+        //public void DrawProjectile(Player player)//drawMap에 넣었음 필요 없음
+        //{
+        //    foreach (Projectile proj in player.projectiles)
+        //    {
+        //        if (proj.isShot)
+        //        {
+        //
+        //            Console.SetCursorPosition(proj.projX, proj.projY);
+        //            Console.WriteLine("○");
+        //        }
+        //    }
+        //}
         public void SetShopItem(ShopStage shop,Item[] item)
         {
             for (int i = 0; i < item.Length; i++)
@@ -78,6 +132,15 @@ namespace weekproject
                     }
                 }
             }
+            for(int i = 0; i < stage.fieldInfo.GetLength(1); i++)
+            {
+                stage.fieldInfo[0, i] = 1;
+                stage.fieldInfo[49, i] = 1;
+                stage.fieldInfo[i, 49] = 1;
+            }
         }
+
+        
+
     }
 }

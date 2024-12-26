@@ -69,7 +69,10 @@ namespace weekproject
         {
             player.Inventory.getGold += _rewardGold;
         }
-
+        public void SetRewardGold()
+        {
+            _rewardGold = Program.random.Next(500, 1001);
+        }
 
     }//end
 }

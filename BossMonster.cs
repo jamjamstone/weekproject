@@ -8,6 +8,6 @@ namespace weekproject
 {
     class BossMonster: Monster
     {
-
+        
     }
 }

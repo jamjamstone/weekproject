@@ -11,11 +11,27 @@ namespace weekproject
         protected string _stageName;
         protected int[,] _fieldInfo = new int[50, 50];
         protected List<Monster> _monsters;
-        protected List<Projectile> _projects;
-        
+        //protected List<Projectile> _projects;
+        public List<Monster> monsters
+        {
+            get {  return _monsters; }
+            set { _monsters = value; }
+        }
+        //public List<Projectile> projectiles
+        //{
+        //    get { return _projects; }
+        //    set { _projects = value; }
+        //}
         public Stage()
         {
             _monsters = new List<Monster>();
+           // _projects = new List<Projectile>(10);
+           // for (int i = 0; i < 10; i++)
+           // {
+           //     _projects[i] = new Projectile();
+           //     _projects[i].isShot = false;
+           // }
+
 
         }
         public string stageName
@@ -30,9 +46,12 @@ namespace weekproject
         }
 
 
-        public void AddMonster(Monster monster)
+        public void AddMonster(Monster monster )
         {
-            _monsters.Add(monster);
+            
+            Monster addMonster = new Monster(monster.MonsterName,monster.MonsterStatus.HP, monster.MonsterStatus.def, monster.MonsterStatus.ATK, monster.MonsterProjectile.Speed,monster.MonsterProjectile.Dmg);
+            _monsters.Add(addMonster);
+
         }
         public void RemoveMonster(int index)
         {
@@ -45,6 +64,7 @@ namespace weekproject
 
         public virtual void DrawMap(/*Stage stage, Player player*/)
         {
+            
             Console.SetCursorPosition(0, 0);
             for (int i = _fieldInfo.GetLength(0) - 1; i >= 0; i--)
             {
@@ -53,7 +73,7 @@ namespace weekproject
                     switch (_fieldInfo[j, i])
                     {
                         case 0://빈칸
-                            Console.Write(" ");
+                            Console.Write("  ");
                             break;
                         case 1: //벽
                             Console.Write("■");
@@ -61,7 +81,7 @@ namespace weekproject
                         case 2://플레이어
                             Console.Write("☆");
                             break;
-                        case 3://플레이어의 투사체
+                        case 3://플레이어의 투사체->별도 함수로 덮어 씌울 예정 필요 없을지도?
                             Console.Write("○");
                             break;
                         case 4://몬스터1

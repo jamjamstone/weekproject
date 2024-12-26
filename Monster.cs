@@ -11,21 +11,37 @@ namespace weekproject
         protected string _monsterName;
         protected int _monsterX;
         protected int _monsterY;
-        
+        protected Projectile[] _projects;
+
         protected Status _monsterStatus;
         protected Projectile _monsterProjectile = new Projectile();
         public Monster()
         {
             _monsterStatus = new Status();
-            _monsterProjectile = new Projectile();  
+            _monsterProjectile = new Projectile();
+            _projects = new Projectile[10];
+            for (int i = 0; i < 10; i++)
+            {
+                _projects[i] = new Projectile();
+                _projects[i].isShot = false;
+            }
         }
-        public Monster(string name, int hp, int def, int atk)
+        public Monster(string name, int hp, int def, int atk, int projspeed, int projdmg):this()
         {
             _monsterName = name;
-            _monsterStatus = new Status();
             _monsterStatus.def = def;
             _monsterStatus.HP = hp;
             _monsterStatus.ATK = atk;
+            foreach (Projectile p in _projects)
+            {
+                p.Dmg = projdmg;
+                p.Speed = projspeed;
+            }
+        }
+        public Projectile[] projectiles
+        {
+            get { return _projects; }
+            set { _projects = value; }
         }
         public int monsterX
         {
@@ -55,7 +71,19 @@ namespace weekproject
         }
         virtual public void MonsterAttack()
         {
-            //_monsterProjectile.ProjectileShoot();
+            foreach (Projectile p in _projects)
+            {
+                if (p.isShot==false)
+                {
+                    p.isShot = true;
+                    p.IsShotLeft = true;
+                    p.projX = _monsterX;
+                    p.projY = _monsterY;
+                    break;
+                    Console.WriteLine("나오면 안됨");
+                }
+            }
+           
         }
 
         public void MonsterHit(Projectile proj)
@@ -63,6 +91,18 @@ namespace weekproject
             _monsterStatus.HP = _monsterStatus.HP - (proj.Dmg - _monsterStatus.def);
         }
 
-
+        public void SetMonsterXY(int x, int y)
+        {
+            _monsterX = x;
+            _monsterY = y;
+        }
+        public void AddProjectiles(int dmg,int speed)//생각중
+        {
+            foreach (Projectile p in _projects)
+            {
+                p.Dmg = dmg;
+                p.Speed = speed;
+            }
+        }
     }
 }

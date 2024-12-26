@@ -17,7 +17,12 @@ namespace weekproject
         int _playerY=26;
         Projectile[] _projectiles= new Projectile[30];
         Projectile _playerProjectile=new Projectile();
-        
+        bool _isFaceLeft = false;
+        public bool isFaceLeft
+        {
+            get { return _isFaceLeft; }
+            set { _isFaceLeft = value; }
+        }
         public Player()
         {
             _playerStatus = new Status();
@@ -33,6 +38,9 @@ namespace weekproject
                 //_projectiles[i] = _playerProjectile;
                 _projectiles[i].isShot = false;
             }
+            _playerStatus.HP = 10;
+            _playerStatus.def = 1;
+            _playerStatus.ATK = 1;
 
         }
         public Player(string name):this()
@@ -89,7 +97,7 @@ namespace weekproject
                 {
                     projectiles[i].isShot = true;
                     projectiles[i].projY = _playerY;
-                    
+                    projectiles[i].IsShotLeft = isFaceLeft;
                     projectiles[i].projX = _playerX;
                     
                     return projectiles[i];   
@@ -129,36 +137,41 @@ namespace weekproject
             _inventory.getGold += gold;
         }
 
-        public void Jump()//점프가진행되는동안 멈춤 좀 더 부드럽게 되는게 필요
-        {
-            Stopwatch sw = Stopwatch.StartNew();
-            sw.Start();
-            for (int i = 0; i < 3; i++)
-            {
-                while (sw.ElapsedMilliseconds < 500)
-                {
-
-                }
-
-                _playerY += 1;
-                sw.Restart();
-            }
-            sw.Stop();
-        }
+        //public void Jump()//점프가진행되는동안 멈춤 좀 더 부드럽게 되는게 필요 -> 점프카운트를 통해서 작성중
+        //{
+        //    Stopwatch sw = Stopwatch.StartNew();
+        //    sw.Start();
+        //    for (int i = 0; i < 3; i++)
+        //    {
+        //        while (sw.ElapsedMilliseconds < 500)
+        //        {
+        //
+        //        }
+        //
+        //        _playerY += 1;
+        //        sw.Restart();
+        //    }
+        //    sw.Stop();
+        //}
         public void Move(string direction)//이동제한조건을 여기에 넣을까 딴데 넣을까-> 필드를 인자로 가지고 있지 않으니 이동 조건은 스테이지에 달자
         {
             if(direction == "left")
             {
                 _playerX -= 1;
+                _isFaceLeft = true;
                 //_playerProjectile.IsShotLeft = true;
 
 
             }else if(direction == "right")
             {
                 _playerX += 1;
+                _isFaceLeft=false;
                 //_playerProjectile.IsShotLeft = false;
             }
         }
-
+        public void PlayerHit(Projectile proj)
+        {
+            _playerStatus.HP = _playerStatus.HP - (proj.Dmg - _playerStatus.def);
+        }
     }
 }

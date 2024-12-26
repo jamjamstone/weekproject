@@ -6,9 +6,14 @@ namespace weekproject
     /// <summary>
     /// projectile을 이용한 전투 시스템, 무작위 맵 생성 및 월드맵 할당 시스템, 이렇게 2개가 중요한 코드
     /// 투사체 객체를 생성하는 식으로 투사체를 생성할 지
+    /// 투사체 스피드는 기능을 생성했지만 사용하지 않는 식으로 후일 스피드를 변경할 필요가 있다면 작용 가능하게
+    /// 
+    /// 
+    /// 
     /// </summary>
     internal class Program
     {
+        public static Stopwatch monsterAttackTimer = new Stopwatch();
         public static int jumpCount = 0;
         public static bool isGameRunning = true;
         public static Stopwatch stopwatch = Stopwatch.StartNew();
@@ -20,8 +25,8 @@ namespace weekproject
             Game game = new Game();
             game.Play();
             //Console.SetWindowPosition(5,5);
-            ShopStage shopstage = new ShopStage();//디버그용
-            shopstage.DrawMap();//디버그용
+            //ShopStage shopstage = new ShopStage();//디버그용
+            //shopstage.DrawMap();//디버그용
             
         }
     }

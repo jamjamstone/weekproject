@@ -31,6 +31,7 @@ namespace weekproject
 
         public void ShowInventory()
         {
+            Console.Clear();
             Console.WriteLine("보유한 아이템 목록");
             int i = 1;
             foreach (Item item in _getItems)
@@ -56,7 +57,11 @@ namespace weekproject
             }
             return sumStatus;
         }
-
-
+        public void DrawInventory()
+        {
+            Console.Clear();
+            Console.WriteLine();
         }
+
+    }
 }

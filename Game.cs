@@ -26,7 +26,7 @@ namespace weekproject
             if (player == null) { return; }
             if (stage is ShopStage)//상점이면 업데이트 필요 없음
             {
-                stage.DrawMap();
+                (stage as ShopStage).DrawMap();
                 return;
             }
             else
@@ -138,6 +138,8 @@ namespace weekproject
 
                 foreach (Monster monster in stage.monsters)// 몬스터 투사체 업데이트 -> 몬스터 투사체가 설정이 재대로 안됨 이부분 고치면 될듯
                 {
+                    Console.WriteLine(monster.MonsterName);
+                    
                     for (int k = 0; k < monster.projectiles.Length; k++)
                     {
                         if (monster.projectiles[k].isShot)//투사체가 발사중이라면
@@ -145,24 +147,25 @@ namespace weekproject
                            // Console.WriteLine("몬스터 투사체 발사중");
                             if (monster.projectiles[k].IsShotLeft)//왼쪽으로 날아가는 중이면
                             {
-                                Console.WriteLine("왼쪽으로 발사");
+                                Console.WriteLine(monster.projectiles[k].Speed);
+                                //Console.WriteLine("왼쪽으로 발사");
                                 for (int i = 0; i < monster.projectiles[k].Speed; i++)
                                 {
-                                    Console.WriteLine("반복1");
+                                    //Console.WriteLine("반복1");
                                     int tempX = monster.projectiles[k].projX - 1;
-                                    if (stage.fieldInfo[tempX, monster.projectiles[k].projY] != 0)//허공이 아니면//오류
+                                       if (tempX>0&&stage.fieldInfo[tempX, monster.projectiles[k].projY] != 0)//허공이 아니면//오류
                                     {
-                                        Console.WriteLine("경로 방해");
+                                       // Console.WriteLine("경로 방해");
 
                                         if (stage.fieldInfo[tempX, monster.projectiles[k].projY] == 1) 
                                         {
-                                            Console.WriteLine("벽에 만남");
+                                           // Console.WriteLine("벽에 만남");
                                             stage.fieldInfo[monster.projectiles[k].projX, monster.projectiles[k].projY] = 0;
                                             monster.projectiles[k].isShot = false;
                                         }
                                         else
                                         {
-                                            Console.WriteLine("벽이 아님");
+                                           // Console.WriteLine("벽이 아님");
                                             // monster.projectiles[k].isShot = false;
                                             stage.fieldInfo[monster.projectiles[k].projX, monster.projectiles[k].projY] = 0;
                                             monster.projectiles[k].projX -= 1;
@@ -171,7 +174,7 @@ namespace weekproject
                                     }
                                     else//아닐경우
                                     {
-                                        Console.WriteLine("경로 방해 없음");
+                                        //Console.WriteLine("경로 방해 없음");
                                         stage.fieldInfo[monster.projectiles[k].projX, monster.projectiles[k].projY] = 0;
                                         monster.projectiles[k].projX -= 1;
 
@@ -202,8 +205,8 @@ namespace weekproject
                                     {
                                         stage.fieldInfo[monster.projectiles[k].projX, monster.projectiles[k].projY] = 0;
                                         monster.projectiles[k].projX += 1;
-                                        Console.WriteLine(monster.projectiles[k].projX);
-                                        Console.WriteLine("몬스터 공격");
+                                       // Console.WriteLine(monster.projectiles[k].projX);
+                                       // Console.WriteLine("몬스터 공격");
                                     }
                                 }
                             }
@@ -235,10 +238,14 @@ namespace weekproject
             {
                 foreach (var proj in monster.projectiles)
                 {
-                    if (proj.isShot)
+                    if (proj.isShot&&proj.projX>0)
                     {
+                        
                         //Console.WriteLine("몬스터 투사체 표시");
                         stage.fieldInfo[proj.projX, proj.projY] = 6;
+                    }else if (proj.projX <= 0)
+                    {
+                        proj.isShot = false;
                     }
                 }
             }
@@ -346,7 +353,7 @@ namespace weekproject
             }
 
         }
-        public void Play()
+        public void Play()//업데이트가 계속 진행되서 그럼 다음 으로 넘어갈 때는 타이머 멈추자
         {
 
             WorldMap<Stage> worldMap = new WorldMap<Stage>();
@@ -372,7 +379,7 @@ namespace weekproject
             Monster normalMonster = new Monster("슬라임", 2, 0, 1,1,1);// 이거 객체 하나만 생성임 addmonster함수에서 별도 생성및 할당 넣기
             normalMonster.MonsterProjectile = new Projectile(1, 1, 0);
             //normalMonster.AddProjectiles(1, 1);
-            Monster normalMonster2 = new Monster("#", 3, 2, 1,1,2);
+            Monster normalMonster2 = new Monster("#", 3, 1, 1,1,2);
             normalMonster.MonsterProjectile = new Projectile(2, 1, 0);
             //몬스터 설정
             //스테이지 설정
@@ -389,12 +396,15 @@ namespace weekproject
 
             battle1.AddMonster(normalMonster);//1은 튜토리얼 스테이지로 조작법을 맵 위에 뛰울 예정, set커서로 배경그리고 커서 이동시켜서 조작법 출력하면 될듯
             battle1.monsters[0].SetMonsterXY(35, 25);
-           // battle1.monsters[0].projectiles[0].Speed = 1;
+            // battle1.monsters[0].projectiles[0].Speed = 1;
 
-            
-            SetMosterAtStage(battle2 as NormalStage, normalMonster, normalMonster2);//전투 스테이지에 몬스터 배정 
-            SetMosterAtStage(battle3 as NormalStage, normalMonster, normalMonster2);//이하동일
-            SetMosterAtStage(battle4 as NormalStage, normalMonster, normalMonster2);//동일
+            battle1.stageName = "1번";
+            battle2.stageName = "2번";
+            battle3.stageName = "3번";
+            battle4.stageName = "4번";
+            SetMosterAtStage(battle2, normalMonster, normalMonster2);//전투 스테이지에 몬스터 배정 
+            SetMosterAtStage(battle3, normalMonster, normalMonster2);//이하동일
+            SetMosterAtStage(battle4, normalMonster, normalMonster2);//동일
             SetBaseField(battle1);
             SetBaseField(battle2);
             SetBaseField(battle3);
@@ -403,7 +413,8 @@ namespace weekproject
             SetBaseField(Boss2);
             //스테이지 설정하기 
             SetBattle2(battle2);
-
+            SetBattle3(battle3);
+            SetBattle4(battle4);
 
 
             //스테이지 설정하기
@@ -423,15 +434,17 @@ namespace weekproject
                 {
                     case 1:
                         worldMap.SetTreeLine(worldMap.StartStage, worldMap.nodes[1]);
-                        Console.WriteLine(worldMap.StartStage.Nodes[0].stage);
+                        //Console.WriteLine(worldMap.StartStage.Nodes[0].stage);
                         worldMap.SetTreeLine(worldMap.nodes[1], worldMap.nodes[4]);
                         break;
                     case 2:
                         worldMap.SetTreeLine(worldMap.StartStage, worldMap.nodes[2]);
+                        //Console.WriteLine(worldMap.StartStage.Nodes[0].stage);
                         worldMap.SetTreeLine(worldMap.nodes[2], worldMap.nodes[4]);
                         break;
                     case 3:
                         worldMap.SetTreeLine(worldMap.StartStage, worldMap.nodes[3]);
+                        //Console.WriteLine(worldMap.StartStage.Nodes[0].stage);
                         worldMap.SetTreeLine(worldMap.nodes[3], worldMap.nodes[4]);
                         break;
                 }
@@ -520,7 +533,7 @@ namespace weekproject
 
                 }
 
-                //if (Program.jumpCount > 0&&nowMapNode.stage.fieldInfo[player.playerX,player.playerY+1]==0) //이거 업데이트에 넣자
+                //if (Program.jumpCount > 0&&nowMapNode.stage.fieldInfo[player.playerX,player.playerY+1]==0) //이거 업데이트에 넣자-> 해결
                 //{
                 //    player.playerY += 1;
                 //    SetPlayerPositionToField(nowMapNode.stage, player);
@@ -529,7 +542,14 @@ namespace weekproject
                 //{
                 //    Program.jumpCount--;
                 //}
-                if (Program.monsterAttackTimer.ElapsedMilliseconds > 1000)
+                if (Program.stopwatch.ElapsedMilliseconds > 100 /*&& !Program.isStageChange*/)//일정시간마다 업데이트
+                {
+                    Update(nowMapNode.stage, player);//업데이트
+                    //Console.WriteLine("시간 지남");//debug
+                    Program.stopwatch.Restart();
+                }
+
+                if (Program.monsterAttackTimer.ElapsedMilliseconds > 1000/*&&!Program.isStageChange*/)
                 {
                     foreach (var monster in nowMapNode.stage.monsters)
                     {
@@ -538,42 +558,48 @@ namespace weekproject
                     }
                     Program.monsterAttackTimer.Restart();
                 }
-                
-                if (Program.stopwatch.ElapsedMilliseconds > 100)//일정시간마다 업데이트
-                {
-                    Update(nowMapNode.stage,player);//업데이트
-                    //Console.WriteLine("시간 지남");//debug
-                    Program.stopwatch.Restart();
-                }
-                if (nowMapNode.stage is NormalStage)
-                {
-                    if ((nowMapNode.stage as NormalStage).isStageEnd())
-                    {
-                        worldMap.NextStageSelect(ref nowMapNode,player);
-                        Console.WriteLine("스테이지 클리어!");
-                    }
 
-
-                }
-                else if ((nowMapNode.stage is ShopStage))
+                if ((nowMapNode.stage is ShopStage))
                 {
                     if ((nowMapNode.stage as ShopStage).isStageEnd())
                     {
                         worldMap.NextStageSelect(ref nowMapNode, player);
+                        
+                        Console.WriteLine(nowMapNode.stage.stageName);
                     }
                 }
-                else if ((nowMapNode.stage is BossStage))
+
+                if (nowMapNode.stage is NormalStage)
+                {
+                    if ((nowMapNode.stage as NormalStage).isStageEnd())
+                    {
+
+                        worldMap.NextStageSelect(ref nowMapNode,player);
+                        Program.monsterAttackTimer.Restart();
+                        Program.stopwatch.Restart();
+                        Console.WriteLine("스테이지 클리어!");
+                        Console.WriteLine(nowMapNode.stage.stageName);
+
+                    }
+
+
+                }
+                
+                if ((nowMapNode.stage is BossStage))
                 {
                     if ((nowMapNode.stage as BossStage).isStageEnd())
                     {
                         worldMap.NextStageSelect(ref nowMapNode, player);
+                        Program.monsterAttackTimer.Restart();
+                        Program.stopwatch.Restart();
+                        Console.WriteLine(nowMapNode.stage.stageName);
                     }
                 }
                 //아닐때 중력 작용
                 //일정 시간마다 몬스터 공격
                 //보스는 패턴 존재
 
-
+                //Console.WriteLine(nowMapNode.stage.stageName);
 
 
             }

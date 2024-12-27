@@ -82,18 +82,23 @@ namespace weekproject
             {
                 if (monster.MonsterName == "슬라임")
                 {
+                    Console.WriteLine(monster.monsterX);
+                    Console.WriteLine(monster.monsterY);
                     stage.fieldInfo[monster.monsterX, monster.monsterY] = 4;
                 }
                 else
                 {
+                    Console.WriteLine(monster.monsterX);
+                    Console.WriteLine(monster.monsterY);
+                    
                     stage.fieldInfo[monster.monsterX, monster.monsterY] = 5;
                 }
             }
         }
-        public void SetWorldMap()
-        {
-
-        }
+        //public void SetWorldMap()
+        //{
+        //
+        //}
         //public void DrawProjectile(Player player)//drawMap에 넣었음 필요 없음
         //{
         //    foreach (Projectile proj in player.projectiles)
@@ -113,7 +118,7 @@ namespace weekproject
                 shop.AddItemToSellList(item[i]);
             }
         }
-        public void SetMosterAtStage(NormalStage battleStage, Monster normalMonster, Monster normalMonster2)
+        public void SetMosterAtStage(Stage battleStage, Monster normalMonster, Monster normalMonster2)
         {
             int slimeNum = Program.random.Next(0, 4);
             for (int i = 0; i < slimeNum; i++)
@@ -211,7 +216,7 @@ namespace weekproject
             {
                 for (int j = 0; j < stage.fieldInfo.GetLength(1); j++)//1이 x
                 {
-                    if (i -j <=22&&j<10)
+                    if (i -j <=22&&j<25)
                     {
                         stage.fieldInfo[j, i] = 1;//1은 땅, 및 벽을 의미
                     }
@@ -258,7 +263,7 @@ namespace weekproject
 
         }
 
-        public void SetBattle4(Stage stage)
+        public void SetBattle4(Stage stage)//배틀 4까지 작성 완료
         {
             int count = 1;
             for (int i = 0; i < stage.fieldInfo.GetLength(0); i++)//0이 y
@@ -328,7 +333,7 @@ namespace weekproject
 
 
 
-        }
+        }//
 
         public void SetBoss1(Stage stage)
         {

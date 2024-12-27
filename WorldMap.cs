@@ -9,18 +9,18 @@ namespace weekproject
     class MapNode<T> where T : class, new()//T에는 stage가 들어갈 예정
     {
         T _stage;
-        
+
         List<MapNode<T>> _nodes;
         public MapNode()
         {
             _stage = new T();
             _nodes = new List<MapNode<T>>();
         }
-        public MapNode(T stage):this()
+        public MapNode(T stage) : this()
         {
-            _stage= stage;
-            
-            
+            _stage = stage;
+
+
         }
         public List<MapNode<T>> Nodes
         {
@@ -37,8 +37,8 @@ namespace weekproject
             get { return _stage; }
             set { _stage = value; }
         }
-    
-        
+
+
 
 
     }
@@ -47,7 +47,7 @@ namespace weekproject
         MapNode<T> _startStage;
         List<MapNode<T>> _nodes;
 
-        public List<MapNode<T>> nodes 
+        public List<MapNode<T>> nodes
         {
             get { return _nodes; }
             set { _nodes = value; }
@@ -92,7 +92,7 @@ namespace weekproject
         //
         //}
 
-        public void AddNode(MapNode<T> addMapNode)  
+        public void AddNode(MapNode<T> addMapNode)
         {
             _nodes.Add(addMapNode);
             if (_startStage == null)
@@ -102,7 +102,7 @@ namespace weekproject
             }
             //_startStage.Nodes.Add(addMapNode);
         }
-        public void SetTreeLine(MapNode<T> upper,MapNode<T> down)
+        public void SetTreeLine(MapNode<T> upper, MapNode<T> down)
         {
             upper.Nodes.Add(down);
         }
@@ -132,40 +132,42 @@ namespace weekproject
 
         public void ShowWorldMapPartial(MapNode<T> currentmap)
         {
-            for (int i = 0; i < currentmap.Nodes.Count; ++i) 
+            for (int i = 0; i < currentmap.Nodes.Count; ++i)
             {
 
             }
         }
 
 
-       public void NextStageSelect(ref MapNode<T> nowStage,Player player)
+        public void NextStageSelect(ref MapNode<T> nowStage, Player player)
         {
-
+            Program.monsterAttackTimer.Stop();
+            Program.stopwatch.Stop();
+            // Program.isStageChange = true;
             int countIndex = 0;
             Console.Clear();
             Console.SetCursorPosition(0, 0);
-            Console.WriteLine("다음 스테이지를 골라주세요!"); 
+            Console.WriteLine("다음 스테이지를 골라주세요!");
             player.ResetPlayerPosition();
-            foreach(MapNode<T> nextStage in nowStage.Nodes)
+            foreach (MapNode<T> nextStage in nowStage.Nodes)
             {
                 Console.WriteLine("반복문 진입");
 
-                if(nextStage != null)
+                if (nextStage != null)
                 {
                     if (nextStage.stage is ShopStage)
                     {
-                        Console.WriteLine($"{countIndex+1}. 상점");
+                        Console.WriteLine($"{countIndex + 1}. 상점");
                         countIndex++;
                     }
                     else if (nextStage.stage is NormalStage)
                     {
-                        Console.WriteLine($"{countIndex+1}. 전투");
+                        Console.WriteLine($"{countIndex + 1}. 전투");
                         countIndex++;
                     }
-                    else if (nextStage.stage is BossStage) 
+                    else if (nextStage.stage is BossStage)
                     {
-                        Console.WriteLine($"{countIndex+1}. 보스");
+                        Console.WriteLine($"{countIndex + 1}. 보스");
                         countIndex++;
                     }
                 }
@@ -178,23 +180,31 @@ namespace weekproject
             while (true)
             {
                 Console.WriteLine("while문 진입");
-                int.TryParse( Console.ReadLine(), out inputNum);
-                if (inputNum < 0 || inputNum > 2)
+                string temp = Console.ReadLine();
+                Console.WriteLine("입력받음");
+                if (int.TryParse(temp, out inputNum))
                 {
-                    continue;
-                }else if(inputNum<3&&inputNum>0)
-                {
-                    
-                    nowStage = nowStage.Nodes[inputNum];
-                    break;
+                    if (nowStage.Nodes[inputNum - 1] == null)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        nowStage = nowStage.Nodes[inputNum - 1];
+
+                        break;
+                    }
+
+
+
                 }
+
+
+
 
             }
 
-            
 
-        }
-
-
-    }//worldmap end
+        }//worldmap end
+    }
 }

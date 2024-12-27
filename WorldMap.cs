@@ -179,9 +179,9 @@ namespace weekproject
             int inputNum;
             while (true)
             {
-                Console.WriteLine("while문 진입");
+                //Console.WriteLine("while문 진입");
                 string temp = Console.ReadLine();
-                Console.WriteLine("입력받음");
+               // Console.WriteLine("입력받음");
                 if (int.TryParse(temp, out inputNum))
                 {
                     if (nowStage.Nodes[inputNum - 1] == null)

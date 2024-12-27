@@ -30,14 +30,14 @@ namespace weekproject
                     //player.Jump();
                     if (Program.jumpCount > 0 )//무한점프
                     {
-                        Console.WriteLine("점프카운트추가안됨!");
+                        //Console.WriteLine("점프카운트추가안됨!");
                         break;
                     }
                     else if(Program.jumpCount==0 && stage.fieldInfo[player.playerX, player.playerY - 1] != 0)
                     {
-                        Console.SetCursorPosition(53, 0);
-                        Program.jumpCount = 3;
-                        Console.WriteLine("점프카운트 추가");
+                        //Console.SetCursorPosition(53, 0);
+                        Program.jumpCount = 4;
+                       // Console.WriteLine("점프카운트 추가");
                     }
                     break;
                 case ConsoleKey.A:
@@ -336,17 +336,33 @@ namespace weekproject
         }//
 
         public void SetBoss1(Stage stage)
-        {
+        {//보스 몸체는 7
             for (int i = 0; i < stage.fieldInfo.GetLength(0); i++)//0이 y
             {
                 for (int j = 0; j < stage.fieldInfo.GetLength(1); j++)//1이 x
                 {
-                    if (i < 25)
+                    if (j > 2&&i>1)
                     {
-                        stage.fieldInfo[j, i] = 1;//1은 땅, 및 벽을 의미
+                        stage.fieldInfo[j, i] = 0;//1은 땅, 및 벽을 의미
                     }
                 }
             }
+
+            for (int i = 0; i < stage.fieldInfo.GetLength(0); i++)//0이 y
+            {
+                for (int j = 0; j < stage.fieldInfo.GetLength(1); j++)//1이 x
+                {
+                    if (j > 38 && i < 35)
+                    {
+                        stage.fieldInfo[j, i] = 7;//1은 땅, 및 벽을 의미
+                    }
+                    if (i>=35&&j+i==39+34)
+                    {
+                        stage.fieldInfo[j, i] = 7;
+                    }
+                }
+            }
+
         }
 
         public void SetBoss2(Stage stage)

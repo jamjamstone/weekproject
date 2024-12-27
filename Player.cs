@@ -122,6 +122,10 @@ namespace weekproject
         }
         public void PlayerSellItemFromInventory(int index)//아이템을 팔면서 스탯변화 적용
         {
+            if (_inventory.getItems.Count < index)
+            {
+                return;
+            }
             _playerStatus.ATK -= _inventory.getItems[index].status.ATK;
             _playerStatus.HP -= _inventory.getItems[index].status.HP;
             _playerStatus.def -= _inventory.getItems[index].status.def;

@@ -33,10 +33,14 @@ namespace weekproject
             if(index < 0) { return; }
             if(index >= _sellingItems.Count) { return; }
 
-
+            if (_sellingItems[index].price > player.Inventory.getGold)
+            {
+                Console.WriteLine("금액이 모자랍니다.");
+                return;
+            }
             player.PlayerAddItemToInventory(_sellingItems[index]);
             player.Inventory.getGold -= _sellingItems[index].price;
-
+            Console.WriteLine($"{_sellingItems[index].itemName} 구매!");
             _sellingItems.RemoveAt(index);
 
         }
@@ -54,7 +58,7 @@ namespace weekproject
             {
                 while (true)
                 {
-                    Console.WriteLine("판매하려고 하는 물품이 상점이 보유한 골드보다 비쌉니다 정말로 파시겠습니까?");
+                    Console.WriteLine("판매하려고 하는 물품이 상점이 보유한 골드보다 비쌉니다 정말로 파시겠습니까? y/n");
                     string tempString = Console.ReadLine();
                     if (tempString == "y")
                     {
@@ -90,8 +94,12 @@ namespace weekproject
         }
         public override void DrawMap()
         {
+            Console.Clear();
+            Console.SetCursorPosition(0, 0);
             Console.WriteLine(Program.merchant);
             ShowItems();
+            Console.SetCursorPosition(0, 45);
+            Console.WriteLine("구매는 b, 판매는 s 를 누르세요");
         }
         public void ShowItems()
         {
@@ -102,7 +110,7 @@ namespace weekproject
                 Console.WriteLine($"{item.price}원");
                 index++;
             }
-            Console.WriteLine("구매는 b, 판매는 s 를 누르세요");
+           
         }
         public void SetField()
         {
@@ -112,26 +120,44 @@ namespace weekproject
 
         public void ShopPlay(Player player)
         {
-            DrawMap();
+            
             ConsoleKeyInfo input;   
             while (!isShopEnd)
             {
+                DrawMap();
+
                 input = Console.ReadKey();
                 switch (input.Key)
                 {
                     case ConsoleKey.B:
                         Console.WriteLine("구매할 물건을 선택해 주세요");
-                        int a;
+                        int a = 0;
                         int.TryParse(Console.ReadLine(), out a);
-                        SellItemToPlayer(player, a);
+                        SellItemToPlayer(player, a - 1);
                         break;
                     case ConsoleKey.S:
-                        
+                        int b;
+                        int.TryParse(Console.ReadLine(), out b);
+                        BuyItemFromPlayer(player, b);
                         break;
-                        default:
+                    case ConsoleKey.Q:
+                        isShopEnd = true;
+                        break;
+                    case ConsoleKey.E:
+                        player.Inventory.ShowInventory();
+
+                        break;
+                    default:
                         break;
                 }
+
+
+
+
+
+
             }
+            //isStageEnd();
         }
     }//end
 }

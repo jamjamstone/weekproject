@@ -10,8 +10,8 @@ namespace weekproject
     {
         int _rewardGold;
         Item _rewardItem;
-        Monster _bossMonster;
-        public Monster BossMonster
+        BossMonster _bossMonster;
+        public BossMonster BossMonster
         {
             get { return _bossMonster; }
             set { _bossMonster = value; }

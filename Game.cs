@@ -222,7 +222,7 @@ namespace weekproject
             SetPlayerPositionToField(stage, player);
             if (stage is BossStage)
             {
-
+                isHitBoss(stage as BossStage, player);
             }
             else
             {
@@ -390,7 +390,7 @@ namespace weekproject
             redSword.SetItemStatus(0, -1, 2);
             redSword.description = "붉은 검, 방어를 대가로 높은 공격력을 얻는다.";
 
-            Item sling = new ItemChangeProj(1, 2, 1);
+            Item sling = new Item("새총",200);
             sling.SetItemStatus(0, 0, 1);
             sling.description = "가벼운 새총, 공격력을 조금 올려준다.";
 
@@ -403,6 +403,13 @@ namespace weekproject
             heartGem.description = "하트보석, 하트모양 보석 왠지 따듯하다.";
             //아이템 설정 
             //몬스터 설정
+            items[0]=redSword;
+            items[1]=sling;
+            items[2]=woodShield;
+            items[3]=heartGem;
+            Stage shop1 = new ShopStage();
+            SetShopItem((shop1 as ShopStage), items);
+
             Monster normalMonster = new Monster("슬라임", 2, 0, 1,1,1);// 이거 객체 하나만 생성임 addmonster함수에서 별도 생성및 할당 넣기
             normalMonster.MonsterProjectile = new Projectile(1, 1, 0);
             //normalMonster.AddProjectiles(1, 1);
@@ -410,14 +417,17 @@ namespace weekproject
             normalMonster.MonsterProjectile = new Projectile(2, 1, 0);
             //몬스터 설정
             //스테이지 설정
-            Stage shop1 = new ShopStage();
-            SetShopItem((shop1 as ShopStage), items);
+            Monster boss1 = new BossMonster();
+            Monster boss2 = new BossMonster();
 
             Stage battle1 = new NormalStage();
             Stage battle2 = new NormalStage();
             Stage battle3 = new NormalStage();
             Stage battle4 = new NormalStage();
-
+            (battle1 as NormalStage).SetRewardGold();
+            (battle2 as NormalStage).SetRewardGold();
+            (battle3 as NormalStage).SetRewardGold();
+            (battle4 as NormalStage).SetRewardGold();
             Stage Boss1 = new BossStage();
             Stage Boss2 = new BossStage();
 
@@ -443,7 +453,7 @@ namespace weekproject
             SetBattle2(battle2);
             SetBattle3(battle3);
             SetBattle4(battle4);
-
+            SetBoss1(Boss1);
 
             //스테이지 설정하기
             worldMap.AddNode(new MapNode<Stage>(battle1));//0
@@ -603,13 +613,19 @@ namespace weekproject
                     Program.stopwatch.Restart();
                 }
 
-                if (Program.monsterAttackTimer.ElapsedMilliseconds > 1000/*&&!Program.isStageChange*/)
+                if (Program.monsterAttackTimer.ElapsedMilliseconds > 1000&&nowMapNode.stage is NormalStage)
                 {
                     foreach (var monster in nowMapNode.stage.monsters)
                     {
                         Console.WriteLine(monster.MonsterName);
                         monster.MonsterAttack();
                     }
+                    Program.monsterAttackTimer.Restart();
+                }
+                if (Program.monsterAttackTimer.ElapsedMilliseconds > 1000 && nowMapNode.stage is BossStage)
+                {
+                    (nowMapNode.stage as BossStage).BossMonster.BossAttack1(player);
+                    (nowMapNode.stage as BossStage).BossMonster.BossAttack2(player);
                     Program.monsterAttackTimer.Restart();
                 }
                 //Console.WriteLine(nowMapNode.stage.stageName);
@@ -627,7 +643,7 @@ namespace weekproject
                 {
                     if ((nowMapNode.stage as NormalStage).isStageEnd())
                     {
-
+                        (nowMapNode.stage as NormalStage).EndOfStage(player);
                         worldMap.NextStageSelect(ref nowMapNode,player);
                         Program.monsterAttackTimer.Restart();
                         Program.stopwatch.Restart();
@@ -647,6 +663,10 @@ namespace weekproject
                         Program.monsterAttackTimer.Restart();
                         Program.stopwatch.Restart();
                         Console.WriteLine(nowMapNode.stage.stageName);
+                        (nowMapNode.stage as BossStage).EndOfStage(player);
+                        Console.WriteLine("Game Clear!");
+
+                        Program.isGameRunning = false;
                     }
                 }
                 //아닐때 중력 작용
@@ -658,7 +678,7 @@ namespace weekproject
 
             }
 
-            Console.WriteLine("게임 종료!");
+           // Console.WriteLine("게임 종료!");
 
 
 

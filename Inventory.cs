@@ -36,9 +36,11 @@ namespace weekproject
             int i = 1;
             foreach (Item item in _getItems)
             {
-                Console.WriteLine($"{i}: {item.itemName}");
+                Console.WriteLine($"{i}: {item.itemName} atk:{item.status.ATK} def:{item.status.def} hp:{item.status.HP}");
+                Console.WriteLine(item.description);
                 i++;
             }
+            Console.WriteLine($"보유한 골드{_getGold}");
             while (Console.ReadKey() == null)
             {
 
@@ -57,11 +59,7 @@ namespace weekproject
             }
             return sumStatus;
         }
-        public void DrawInventory()
-        {
-            Console.Clear();
-            Console.WriteLine();
-        }
+       
 
     }
 }

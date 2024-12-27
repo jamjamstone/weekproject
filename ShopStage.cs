@@ -8,6 +8,7 @@ namespace weekproject
 {
     class ShopStage: Stage, IMapDrawing
     {
+        public static bool isShopEnd = false;
         List<Item> _sellingItems;
         int _shopGold;
         public int ShopGold
@@ -29,7 +30,10 @@ namespace weekproject
         public void SellItemToPlayer(Player player,int index)
         {
             if (player == null) { return; }
-            
+            if(index < 0) { return; }
+            if(index >= _sellingItems.Count) { return; }
+
+
             player.PlayerAddItemToInventory(_sellingItems[index]);
             player.Inventory.getGold -= _sellingItems[index].price;
 
@@ -73,9 +77,9 @@ namespace weekproject
             }
 
         }
-        public bool isStageEnd(ConsoleKeyInfo inputKey)
+        public override bool isStageEnd()
         {
-            if(inputKey.Key == ConsoleKey.Spacebar)
+            if (isShopEnd)
             {
                 return true;
             }
@@ -86,12 +90,48 @@ namespace weekproject
         }
         public override void DrawMap()
         {
-            
+            Console.WriteLine(Program.merchant);
+            ShowItems();
         }
-
+        public void ShowItems()
+        {
+            int index = 0;
+            foreach (Item item in _sellingItems)
+            {
+                Console.WriteLine($"{index+1}{item.itemName}:{item.description}");
+                Console.WriteLine($"{item.price}원");
+                index++;
+            }
+            Console.WriteLine("구매는 b, 판매는 s 를 누르세요");
+        }
         public void SetField()
         {
             //for(int )
+        }
+
+
+        public void ShopPlay(Player player)
+        {
+            DrawMap();
+            ConsoleKeyInfo input;   
+            while (!isShopEnd)
+            {
+                input = Console.ReadKey();
+                switch (input.Key)
+                {
+                    case ConsoleKey.B:
+                        Console.WriteLine("구매할 물건을 선택해 주세요");
+                        int a;
+                        int.TryParse(Console.ReadLine(), out a);
+                        SellItemToPlayer(player, a);
+                        break;
+                    case ConsoleKey.S:
+                        
+                        break;
+                        default:
+                        break;
+                }
+            }
         }
     }//end
 }

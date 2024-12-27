@@ -10,6 +10,12 @@ namespace weekproject
     {
         int _rewardGold;
         Item _rewardItem;
+        Monster _bossMonster;
+        public Monster BossMonster
+        {
+            get { return _bossMonster; }
+            set { _bossMonster = value; }
+        }
         public int rewardGold
         {
             get { return _rewardGold; }

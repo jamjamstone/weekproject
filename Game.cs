@@ -26,7 +26,9 @@ namespace weekproject
             if (player == null) { return; }
             if (stage is ShopStage)//상점이면 업데이트 필요 없음
             {
-                (stage as ShopStage).DrawMap();
+                (stage as ShopStage).ShopPlay(player);
+                
+                
                 return;
             }
             else
@@ -329,10 +331,35 @@ namespace weekproject
         }
         public void isHitBoss(BossStage bossStage, Player player)
         {
+            for (int i = bossStage.fieldInfo.GetLength(0) - 1; i >= 0; i--)
+            {
+                for (int j = 0; j < bossStage.fieldInfo.GetLength(1); j++)
+                {
+                    foreach(Projectile proj in player.projectiles)
+                    {
+                        if (proj.isShot)
+                        {
+                            if (bossStage.fieldInfo[j, i] == 7 && j == proj.projX && i == proj.projY)
+                            {
+                                bossStage.BossMonster.MonsterHit(proj);
+                            }
+                        }
+                    }
 
+
+                }
+            }
         }
-        public void BossDead(BossStage bossStage, Player player)
+        public bool BossDead(BossStage bossStage, Player player)
         {
+            if (bossStage.BossMonster.MonsterStatus.HP <= 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
 
         }
         public void MonsterDead(Stage stage)// 몬스터 죽었는지 확인
@@ -402,6 +429,7 @@ namespace weekproject
             battle2.stageName = "2번";
             battle3.stageName = "3번";
             battle4.stageName = "4번";
+            shop1.stageName = "상점";
             SetMosterAtStage(battle2, normalMonster, normalMonster2);//전투 스테이지에 몬스터 배정 
             SetMosterAtStage(battle3, normalMonster, normalMonster2);//이하동일
             SetMosterAtStage(battle4, normalMonster, normalMonster2);//동일
@@ -433,19 +461,45 @@ namespace weekproject
                 switch (Program.random.Next(1, 4))//랜덤하게 튜토스테이지랑 연결
                 {
                     case 1:
-                        worldMap.SetTreeLine(worldMap.StartStage, worldMap.nodes[1]);
-                        //Console.WriteLine(worldMap.StartStage.Nodes[0].stage);
-                        worldMap.SetTreeLine(worldMap.nodes[1], worldMap.nodes[4]);
+                        if (Program.stageAddCount != 1)
+                        {
+                            worldMap.SetTreeLine(worldMap.StartStage, worldMap.nodes[1]);
+                            //Console.WriteLine(worldMap.StartStage.Nodes[0].stage);
+                            worldMap.SetTreeLine(worldMap.nodes[1], worldMap.nodes[4]);
+                            Program.stageAddCount = 1;
+                        }
+                        else
+                        {
+
+                            i--;
+                        }
+                        
                         break;
                     case 2:
-                        worldMap.SetTreeLine(worldMap.StartStage, worldMap.nodes[2]);
-                        //Console.WriteLine(worldMap.StartStage.Nodes[0].stage);
-                        worldMap.SetTreeLine(worldMap.nodes[2], worldMap.nodes[4]);
+                        if (Program.stageAddCount != 2)
+                        {
+                            worldMap.SetTreeLine(worldMap.StartStage, worldMap.nodes[2]);
+                            //Console.WriteLine(worldMap.StartStage.Nodes[0].stage);
+                            worldMap.SetTreeLine(worldMap.nodes[2], worldMap.nodes[4]);
+                            Program.stageAddCount = 2;
+                        }
+                        else
+                        {
+                            i--;
+                        }
                         break;
                     case 3:
-                        worldMap.SetTreeLine(worldMap.StartStage, worldMap.nodes[3]);
-                        //Console.WriteLine(worldMap.StartStage.Nodes[0].stage);
-                        worldMap.SetTreeLine(worldMap.nodes[3], worldMap.nodes[4]);
+                        if (Program.stageAddCount != 3)
+                        {
+                            worldMap.SetTreeLine(worldMap.StartStage, worldMap.nodes[3]);
+                            //Console.WriteLine(worldMap.StartStage.Nodes[0].stage);
+                            worldMap.SetTreeLine(worldMap.nodes[3], worldMap.nodes[4]);
+                            Program.stageAddCount = 3;
+                        }
+                        else
+                        {
+                            i--;
+                        }
                         break;
                 }
             }
@@ -553,13 +607,13 @@ namespace weekproject
                 {
                     foreach (var monster in nowMapNode.stage.monsters)
                     {
-                        Console.WriteLine("몬스터 공격");
+                        Console.WriteLine(monster.MonsterName);
                         monster.MonsterAttack();
                     }
                     Program.monsterAttackTimer.Restart();
                 }
-
-                if ((nowMapNode.stage is ShopStage))
+                //Console.WriteLine(nowMapNode.stage.stageName);
+                if (nowMapNode.stage is ShopStage)
                 {
                     if ((nowMapNode.stage as ShopStage).isStageEnd())
                     {
@@ -585,7 +639,7 @@ namespace weekproject
 
                 }
                 
-                if ((nowMapNode.stage is BossStage))
+                if (nowMapNode.stage is BossStage)
                 {
                     if ((nowMapNode.stage as BossStage).isStageEnd())
                     {

@@ -14,7 +14,7 @@ namespace weekproject
         protected Projectile[] _projects;
 
         protected Status _monsterStatus;
-        protected Projectile _monsterProjectile = new Projectile();
+        protected Projectile _monsterProjectile;
         public Monster()
         {
             _monsterStatus = new Status();
@@ -32,6 +32,7 @@ namespace weekproject
             _monsterStatus.def = def;
             _monsterStatus.HP = hp;
             _monsterStatus.ATK = atk;
+            _monsterProjectile = new Projectile(projdmg,projspeed,0);
             foreach (Projectile p in _projects)
             {
                 p.Dmg = projdmg;

@@ -75,7 +75,7 @@ namespace weekproject
         }
         public bool isStageEnd(ConsoleKeyInfo inputKey)
         {
-            if(inputKey.Key == ConsoleKey.Q)
+            if(inputKey.Key == ConsoleKey.Spacebar)
             {
                 return true;
             }

@@ -9,17 +9,17 @@ namespace weekproject
     class MapNode<T> where T : class, new()//T에는 stage가 들어갈 예정
     {
         T _stage;
-        int _level;
+        
         List<MapNode<T>> _nodes;
         public MapNode()
         {
             _stage = new T();
             _nodes = new List<MapNode<T>>();
         }
-        public MapNode(T stage, int level)
+        public MapNode(T stage):this()
         {
             _stage= stage;
-            _level = level;
+            
             
         }
         public List<MapNode<T>> Nodes
@@ -27,11 +27,11 @@ namespace weekproject
             get { return _nodes; }
             set { _nodes = value; }
         }
-        public int level
-        {
-            get { return _level; }
-            set { _level = value; }
-        }
+        //public int level
+        //{
+        //    get { return _level; }
+        //    set { _level = value; }
+        //}
         public T stage
         {
             get { return _stage; }
@@ -45,7 +45,13 @@ namespace weekproject
     class WorldMap<T> where T : class, new()
     {
         MapNode<T> _startStage;
+        List<MapNode<T>> _nodes;
 
+        public List<MapNode<T>> nodes 
+        {
+            get { return _nodes; }
+            set { _nodes = value; }
+        }
         public MapNode<T> StartStage
         {
             get { return _startStage; }
@@ -53,58 +59,75 @@ namespace weekproject
         }
         public WorldMap()
         {
-            _startStage = new MapNode<T>();
+            _nodes = new List<MapNode<T>>();
+            //_startStage = new MapNode<T>();
         }
-        public void AddNode(T stage, int layer)//구현완 테스트x
+        //public void AddNode(T stage, int layer)//구현완 테스트x
+        //{
+        //    int countLayer = 0;
+        //    if (_startStage == null)
+        //    {
+        //        _startStage = new MapNode<T>(stage, 0);
+        //
+        //
+        //    }
+        //    else
+        //    {
+        //        MapNode<T> current = _startStage;
+        //        while (countLayer < layer-1)
+        //        {
+        //            
+        //            current = current?.Nodes[Program.random.Next(0, current.Nodes.Count)];
+        //        }
+        //        if (current.Nodes.Count <= 0)
+        //        {
+        //            current.Nodes.Add(new MapNode<T>(stage, countLayer));
+        //        }
+        //        else
+        //        {
+        //            current.Nodes[Program.random.Next(0, current.Nodes.Count)] = new MapNode<T>(stage, layer);//에러
+        //        }
+        //    }
+        //    
+        //
+        //}
+
+        public void AddNode(MapNode<T> addMapNode)  
         {
-            int countLayer = 0;
+            _nodes.Add(addMapNode);
             if (_startStage == null)
             {
-                _startStage = new MapNode<T>(stage, 0);
-
-
+                Console.WriteLine("1스테이지 설정");
+                _startStage = addMapNode;
             }
-            else
-            {
-                MapNode<T> current = _startStage;
-                while (countLayer < layer-1)
-                {
-                    
-                    current = current?.Nodes[Program.random.Next(0, current.Nodes.Count)];
-                }
-                if (current.Nodes.Count <= 0)
-                {
-                    current.Nodes.Add(new MapNode<T>(stage, countLayer));
-                }
-                else
-                {
-                    current.Nodes[Program.random.Next(0, current.Nodes.Count)] = new MapNode<T>(stage, layer);//에러
-                }
-            }
-            
-
+            //_startStage.Nodes.Add(addMapNode);
         }
-        public void RemoveNode(MapNode<T> node) // 구현중....인데 이거 필요함? 기능에는 없어도 될거 같은데
+        public void SetTreeLine(MapNode<T> upper,MapNode<T> down)
         {
-            Stack<MapNode<T>> visitedNode = new Stack<MapNode<T>>();
-            MapNode<T> current = _startStage;
-            while (current != node)
-            {
-                visitedNode.Push(current);
-                for (int i = 0; i < current.Nodes.Count; i++)
-                {
-                    if (current.Nodes[i] == node)
-                    {
-                        current = current.Nodes[i];
-
-                        break;
-                    }
-                }
-
-
-
-            }
+            upper.Nodes.Add(down);
         }
+
+        //public void RemoveNode(MapNode<T> node) // 구현중....인데 이거 필요함? 기능에는 없어도 될거 같은데
+        //{
+        //    Stack<MapNode<T>> visitedNode = new Stack<MapNode<T>>();
+        //    MapNode<T> current = _startStage;
+        //    while (current != node)
+        //    {
+        //        visitedNode.Push(current);
+        //        for (int i = 0; i < current.Nodes.Count; i++)
+        //        {
+        //            if (current.Nodes[i] == node)
+        //            {
+        //                current = current.Nodes[i];
+        //
+        //                break;
+        //            }
+        //        }
+        //
+        //
+        //
+        //    }
+        //}
 
 
         public void ShowWorldMapPartial(MapNode<T> currentmap)
@@ -116,13 +139,17 @@ namespace weekproject
         }
 
 
-       static public void NextStageSelect(MapNode<T> nowStage)
+       public void NextStageSelect(ref MapNode<T> nowStage,Player player)
         {
 
             int countIndex = 0;
-            Console.WriteLine("다음 스테이지를 골라주세요!");
-            foreach(MapNode<T> nextStage in nowStage?.Nodes)
+            Console.Clear();
+            Console.SetCursorPosition(0, 0);
+            Console.WriteLine("다음 스테이지를 골라주세요!"); 
+            player.ResetPlayerPosition();
+            foreach(MapNode<T> nextStage in nowStage.Nodes)
             {
+                Console.WriteLine("반복문 진입");
 
                 if(nextStage != null)
                 {
@@ -142,13 +169,22 @@ namespace weekproject
                         countIndex++;
                     }
                 }
+                else
+                {
+                    Console.WriteLine("연결된 노드가 없습니다.");
+                }
             }
             int inputNum;
             while (true)
             {
+                Console.WriteLine("while문 진입");
                 int.TryParse( Console.ReadLine(), out inputNum);
-                if ( nowStage?.Nodes.Count>inputNum)
+                if (inputNum < 0 || inputNum > 2)
                 {
+                    continue;
+                }else if(inputNum<3&&inputNum>0)
+                {
+                    
                     nowStage = nowStage.Nodes[inputNum];
                     break;
                 }

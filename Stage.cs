@@ -53,9 +53,9 @@ namespace weekproject
             _monsters.Add(addMonster);
 
         }
-        public void RemoveMonster(int index)
+        public void RemoveMonster(Monster monster)
         {
-            _monsters.RemoveAt(index);
+            _monsters.Remove(monster);
         }
         public virtual bool isStageEnd()
         {

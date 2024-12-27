@@ -26,6 +26,7 @@ namespace weekproject
             if (player == null) { return; }
             if (stage is ShopStage)//상점이면 업데이트 필요 없음
             {
+                stage.DrawMap();
                 return;
             }
             else
@@ -55,13 +56,7 @@ namespace weekproject
                 //
                 //    monster.MonsterAttack();
                 //}
-                foreach (var monster in stage.monsters)
-                {
-                    foreach(var proj in monster.projectiles)
-                    {
-
-                    }
-                }
+                
                     for (int i = stage.fieldInfo.GetLength(0) - 1; i >= 0; i--)//플레이어 위치 추적
                 {
                     for (int j = 0; j < stage.fieldInfo.GetLength(1); j++)
@@ -155,7 +150,7 @@ namespace weekproject
                                 {
                                     Console.WriteLine("반복1");
                                     int tempX = monster.projectiles[k].projX - 1;
-                                    if (stage.fieldInfo[tempX, monster.projectiles[k].projY] != 0)//허공이 아니면
+                                    if (stage.fieldInfo[tempX, monster.projectiles[k].projY] != 0)//허공이 아니면//오류
                                     {
                                         Console.WriteLine("경로 방해");
 
@@ -219,61 +214,67 @@ namespace weekproject
                 }
             }
 
-                SetPlayerPositionToField(stage, player);
+            SetPlayerPositionToField(stage, player);
+            if (stage is BossStage)
+            {
+
+            }
+            else
+            {
                 isHit(stage, player);//맞았는지 확인 및 체력이 전부 단 몬스터 제거
-                
-            
-                foreach (var proj in player.projectiles)
+            }
+
+            foreach (var proj in player.projectiles)
+            {
+                if (proj.isShot)
+                {
+                    stage.fieldInfo[proj.projX, proj.projY] = 3;
+                }
+            }
+            foreach (var monster in stage.monsters)
+            {
+                foreach (var proj in monster.projectiles)
                 {
                     if (proj.isShot)
                     {
-                        stage.fieldInfo[proj.projX, proj.projY] = 3;
+                        //Console.WriteLine("몬스터 투사체 표시");
+                        stage.fieldInfo[proj.projX, proj.projY] = 6;
                     }
                 }
-                foreach (var monster in stage.monsters)
-                {
-                    foreach (var proj in monster.projectiles)
-                    {
-                        if (proj.isShot)
-                        {
-                        Console.WriteLine("몬스터 투사체 표시");
-                            stage.fieldInfo[proj.projX, proj.projY] = 6;
-                        }
-                    }
-                }
+            }
             SetMonsterPositionToField(stage);
             stage.DrawMap();
 
-                //for(int i=stage.fieldInfo.GetLength(0);i>=0; i++)
-                //{
-                //    for(int j = 0; j < stage.fieldInfo.GetLength(1); j++)
-                //    {
-                //        
-                //        for(int k=0;k<player.projectiles.Length;k++)
-                //        {
-                //            if (player.projectiles[k].isShot)
-                //            {
-                //                if(player.projectiles[k].IsShotLeft)
-                //                {
-                //                    int tempX = player.projectiles[k].projX - player.projectiles[k].Speed;
-                //                    if (stage.fieldInfo[tempX,])
-                //                    player.projectiles[k].projX -= player.projectiles[k].Speed;
-                //                }
-                //                else
-                //                {
-                //                    player.projectiles[k].projX += player.projectiles[k].Speed;
-                //                }
-                //            }
-                //        }
-                //
-                //
-                //
-                //    }
-                //}
+            //for(int i=stage.fieldInfo.GetLength(0);i>=0; i++)
+            //{
+            //    for(int j = 0; j < stage.fieldInfo.GetLength(1); j++)
+            //    {
+            //        
+            //        for(int k=0;k<player.projectiles.Length;k++)
+            //        {
+            //            if (player.projectiles[k].isShot)
+            //            {
+            //                if(player.projectiles[k].IsShotLeft)
+            //                {
+            //                    int tempX = player.projectiles[k].projX - player.projectiles[k].Speed;
+            //                    if (stage.fieldInfo[tempX,])
+            //                    player.projectiles[k].projX -= player.projectiles[k].Speed;
+            //                }
+            //                else
+            //                {
+            //                    player.projectiles[k].projX += player.projectiles[k].Speed;
+            //                }
+            //            }
+            //        }
+            //
+            //
+            //
+            //    }
+            //}
 
 
 
-            
+
 
 
 
@@ -290,7 +291,7 @@ namespace weekproject
                     {
                         if (proj.isShot)
                         {
-                            //Console.WriteLine("몬스터가 맞음");
+                            Console.WriteLine("몬스터가 맞음");
                             monster.MonsterHit(proj);
                             proj.isShot = false;
                         }
@@ -319,7 +320,14 @@ namespace weekproject
 
 
         }
+        public void isHitBoss(BossStage bossStage, Player player)
+        {
 
+        }
+        public void BossDead(BossStage bossStage, Player player)
+        {
+
+        }
         public void MonsterDead(Stage stage)// 몬스터 죽었는지 확인
         {
             //var monsters = new List<Monster>(stage.monsters);
@@ -346,16 +354,16 @@ namespace weekproject
             Item[] items = new Item[4];
             Item redSword = new Item("빨강검", 300);
             redSword.SetItemStatus(0, -1, 2);
-
             redSword.description = "붉은 검, 방어를 대가로 높은 공격력을 얻는다.";
+
             Item sling = new ItemChangeProj(1, 2, 1);
             sling.SetItemStatus(0, 0, 1);
+            sling.description = "가벼운 새총, 공격력을 조금 올려준다.";
 
-            sling.description = "가벼운 새총, 공격이 기이한 궤도를 그린다.";
             Item woodShield = new Item("나무방패", 200);
             woodShield.SetItemStatus(0, 1, 0);
-
             woodShield.description = "나무방패, 가벼운 나무방패 안심된다.";
+
             Item heartGem = new Item("하트보석", 200);
             heartGem.SetItemStatus(5, 0, 0);
             heartGem.description = "하트보석, 하트모양 보석 왠지 따듯하다.";
@@ -393,18 +401,64 @@ namespace weekproject
             SetBaseField(battle4);
             SetBaseField(Boss1);
             SetBaseField(Boss2);
+            //스테이지 설정하기 
+            SetBattle2(battle2);
+
+
+
+            //스테이지 설정하기
+            worldMap.AddNode(new MapNode<Stage>(battle1));//0
+            worldMap.AddNode(new MapNode<Stage>(battle2));//1
+            worldMap.AddNode(new MapNode<Stage>(battle3));//2
+            worldMap.AddNode(new MapNode<Stage>(battle4));//3
+            worldMap.AddNode(new MapNode<Stage>(shop1));//4
+            worldMap.AddNode(new MapNode<Stage>(Boss1));//5
+            worldMap.AddNode(new MapNode<Stage>(Boss2));//6
+          //worldMap.StartStage = new MapNode<Stage>(battle1);
+
+            //트리 구조 생성중
+            for (int i = 0; i < 2; i++)//2번
+            {
+                switch (Program.random.Next(1, 4))//랜덤하게 튜토스테이지랑 연결
+                {
+                    case 1:
+                        worldMap.SetTreeLine(worldMap.StartStage, worldMap.nodes[1]);
+                        Console.WriteLine(worldMap.StartStage.Nodes[0].stage);
+                        worldMap.SetTreeLine(worldMap.nodes[1], worldMap.nodes[4]);
+                        break;
+                    case 2:
+                        worldMap.SetTreeLine(worldMap.StartStage, worldMap.nodes[2]);
+                        worldMap.SetTreeLine(worldMap.nodes[2], worldMap.nodes[4]);
+                        break;
+                    case 3:
+                        worldMap.SetTreeLine(worldMap.StartStage, worldMap.nodes[3]);
+                        worldMap.SetTreeLine(worldMap.nodes[3], worldMap.nodes[4]);
+                        break;
+                }
+            }
+
             
+            switch (Program.random.Next(1, 3))//랜덤하게 보스스테이지랑 연결
+            {
+                case 1:
+                    worldMap.SetTreeLine(worldMap.nodes[4], worldMap.nodes[5]);
+                    break;
+                case 2:
+                    worldMap.SetTreeLine(worldMap.nodes[4], worldMap.nodes[6]);
+                    break;
+                
+            }
             //worldMap.AddNode(battle2, 1);
             //worldMap.AddNode(battle3, 1);
             //worldMap.AddNode(battle4, 2);
             //worldMap.AddNode(shop1, 2);
 
-            
+
             //worldMap.AddNodeRandom(battle2, 2);
             //worldMap.AddNodeRandom(battle3, 2);
             //worldMap.AddNodeRandom((shop1 as ShopStage), 3);
             //worldMap.AddNodeRandom(Boss1, 3);
-            
+
 
             //스테이지설정
 
@@ -430,10 +484,19 @@ namespace weekproject
             player.playerName = Console.ReadLine();
             //WorldMap <Stage> worldMap = new WorldMap <Stage>();
             MapNode<Stage> nowMapNode;
-            //worldMap.AddNodeRandom();
-            MapNode<Stage> battle1Node = new MapNode<Stage>(battle1,0);
-            worldMap.StartStage = battle1Node;
+            
+            //MapNode<Stage> battle1Node = new MapNode<Stage>(battle1);
+            //worldMap.StartStage = battle1Node;
             nowMapNode = worldMap.StartStage;
+
+            //foreach(MapNode<Stage> map in nowMapNode.Nodes)
+            //{
+            //    Console.WriteLine("sdfsdf");
+            //}
+            //foreach (MapNode<Stage> map in worldMap.StartStage.Nodes)
+            //{
+            //    Console.WriteLine("sdfsdf");
+            //}
 
             //nowMapNode.Nodes.Add(new MapNode<Stage>(battle2, 1));
             //nowMapNode.Nodes.Add(new MapNode<Stage>(shop1, 1));
@@ -453,7 +516,7 @@ namespace weekproject
                 {//키가 눌렸을 때 이동, 중력 작용, 공격기능, 메뉴 열기, 스페이스바 공격 w 위로 점프 a왼쪽 d오른쪽 s 아무것도 없음 q 종료 e 인벤토리 열기 및 일시정지
                     inputKey = Console.ReadKey();
                     DetectKey(inputKey, nowMapNode.stage, player);
-                    Console.WriteLine("키 인식");//debug
+                    //Console.WriteLine("키 인식");//debug
 
                 }
 
@@ -470,21 +533,23 @@ namespace weekproject
                 {
                     foreach (var monster in nowMapNode.stage.monsters)
                     {
-
+                        Console.WriteLine("몬스터 공격");
                         monster.MonsterAttack();
                     }
+                    Program.monsterAttackTimer.Restart();
                 }
+                
                 if (Program.stopwatch.ElapsedMilliseconds > 100)//일정시간마다 업데이트
                 {
                     Update(nowMapNode.stage,player);//업데이트
-                    Console.WriteLine("시간 지남");//debug
+                    //Console.WriteLine("시간 지남");//debug
                     Program.stopwatch.Restart();
                 }
                 if (nowMapNode.stage is NormalStage)
                 {
                     if ((nowMapNode.stage as NormalStage).isStageEnd())
                     {
-                        WorldMap<Stage>.NextStageSelect(nowMapNode);
+                        worldMap.NextStageSelect(ref nowMapNode,player);
                         Console.WriteLine("스테이지 클리어!");
                     }
 
@@ -494,14 +559,14 @@ namespace weekproject
                 {
                     if ((nowMapNode.stage as ShopStage).isStageEnd())
                     {
-                        WorldMap<Stage>.NextStageSelect(nowMapNode);
+                        worldMap.NextStageSelect(ref nowMapNode, player);
                     }
                 }
                 else if ((nowMapNode.stage is BossStage))
                 {
                     if ((nowMapNode.stage as BossStage).isStageEnd())
                     {
-                        WorldMap<Stage>.NextStageSelect(nowMapNode);
+                        worldMap.NextStageSelect(ref nowMapNode, player);
                     }
                 }
                 //아닐때 중력 작용

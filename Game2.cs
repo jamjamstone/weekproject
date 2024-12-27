@@ -145,7 +145,222 @@ namespace weekproject
             }
         }
 
-        
+        public void SetBattle2(Stage stage)
+        {
+            int count = 1;
+            for (int i = 0; i < stage.fieldInfo.GetLength(0); i++)//0이 y, i가 y
+            {
+                for (int j = 0; j < stage.fieldInfo.GetLength(1); j++)//1이 x,j가 x
+                {
+
+                    if (10 < j && j < 30)
+                    {
+                        stage.fieldInfo[j, i] = 0;
+                    }
+                }
+            }
+            for (int i = 0; i < stage.fieldInfo.GetLength(0); i++)//0이 y, i가 y
+            {
+                for (int j = 0; j < stage.fieldInfo.GetLength(1); j++)//1이 x,j가 x
+                {
+
+                    if (10 < j && j < 30 && i == 26)
+                    {
+                        stage.fieldInfo[j, i] = 1;
+                    }
+                }
+            }
+            for (int i = 0; i < stage.fieldInfo.GetLength(1); i++)
+            {
+                stage.fieldInfo[0, i] = 1;
+                stage.fieldInfo[49, i] = 1;
+                stage.fieldInfo[i, 49] = 1;
+            }
+            foreach (Monster monster in stage.monsters)
+            {
+                switch (count)
+                {
+                    case 1:
+                        monster.SetMonsterXY(Program.random.Next(5, 10), 25);
+                        break;
+                    case 2:
+                        monster.SetMonsterXY(Program.random.Next(30, 40), 25);
+                        break;
+                    case 3:
+                        monster.SetMonsterXY(Program.random.Next(11, 15), 27);
+                        break;
+                    case 4:
+                        monster.SetMonsterXY(Program.random.Next(15, 29), 27);
+                        break;
+                    default:
+                        break;
+                }
+                count++;
+            }
+        }
+
+       
+
+
+
+
+        public void SetBattle3(Stage stage)
+        {
+            int count = 1;
+            for (int i = 0; i < stage.fieldInfo.GetLength(0); i++)//0이 y
+            {
+                for (int j = 0; j < stage.fieldInfo.GetLength(1); j++)//1이 x
+                {
+                    if (i -j <=22&&j<10)
+                    {
+                        stage.fieldInfo[j, i] = 1;//1은 땅, 및 벽을 의미
+                    }
+                }
+            }
+            for (int i = 0; i < stage.fieldInfo.GetLength(0); i++)//0이 y
+            {
+                for (int j = 0; j < stage.fieldInfo.GetLength(1); j++)//1이 x
+                {
+                    if (j>= 25 && j < 30)
+                    {
+                        stage.fieldInfo[j, i] = 0;//1은 땅, 및 벽을 의미
+                    }
+                }
+            }
+
+            for (int i = 0; i < stage.fieldInfo.GetLength(1); i++)
+            {
+                stage.fieldInfo[0, i] = 1;
+                stage.fieldInfo[49, i] = 1;
+                stage.fieldInfo[i, 49] = 1;
+            }
+            foreach (Monster monster in stage.monsters)
+            {
+                switch (count)
+                {
+                    case 1:
+                        monster.SetMonsterXY(8, 31);
+                        break;
+                    case 2:
+                        monster.SetMonsterXY(10, 33);
+                        break;
+                    case 3:
+                        monster.SetMonsterXY(33,25);
+                        break;
+                    case 4:
+                        monster.SetMonsterXY(41, 25);
+                        break;
+                    default:
+                        break;
+                }
+                count++;
+            }
+
+        }
+
+        public void SetBattle4(Stage stage)
+        {
+            int count = 1;
+            for (int i = 0; i < stage.fieldInfo.GetLength(0); i++)//0이 y
+            {
+                for (int j = 0; j < stage.fieldInfo.GetLength(1); j++)//1이 x
+                {
+                    if (13 < j && j < 18 && i == 27)
+                    {
+                        stage.fieldInfo[j, i] = 1;
+                    }
+
+                    if(31 < j && j < 36 && i == 27)
+                    {
+                        stage.fieldInfo[j, i] = 1;
+                    }
+                    if(18 < j && j < 31 && i == 29)
+                    {
+                        stage.fieldInfo[j, i] = 1;
+                    }
+                }
+            }
+            for (int i = 0; i < stage.fieldInfo.GetLength(0); i++)//0이 y
+            {
+                for (int j = 0; j < stage.fieldInfo.GetLength(1); j++)//1이 x
+                {
+                    if (i < 25&&13<j&&j<36)
+                    {
+                        stage.fieldInfo[j, i] = 0;//1은 땅, 및 벽을 의미
+                    }
+                }
+            }
+
+
+
+
+
+            for (int i = 0; i < stage.fieldInfo.GetLength(1); i++)//바닥은 갱신 안함!
+            {
+                stage.fieldInfo[0, i] = 1;
+                stage.fieldInfo[49, i] = 1;
+                stage.fieldInfo[i, 49] = 1;
+            }
+            foreach (Monster monster in stage.monsters)
+            {
+                switch (count)
+                {
+                    case 1:
+                        monster.SetMonsterXY(15, 28);
+                        break;
+                    case 2:
+                        monster.SetMonsterXY(21, 30);
+                        break;
+                    case 3:
+                        monster.SetMonsterXY(36, 30);
+                        break;
+                    case 4:
+                        monster.SetMonsterXY(34, 28);
+                        break;
+                    default:
+                        break;
+                }
+                count++;
+            }
+
+
+
+
+
+
+        }
+
+        public void SetBoss1(Stage stage)
+        {
+            for (int i = 0; i < stage.fieldInfo.GetLength(0); i++)//0이 y
+            {
+                for (int j = 0; j < stage.fieldInfo.GetLength(1); j++)//1이 x
+                {
+                    if (i < 25)
+                    {
+                        stage.fieldInfo[j, i] = 1;//1은 땅, 및 벽을 의미
+                    }
+                }
+            }
+        }
+
+        public void SetBoss2(Stage stage)
+        {
+            for (int i = 0; i < stage.fieldInfo.GetLength(0); i++)//0이 y
+            {
+                for (int j = 0; j < stage.fieldInfo.GetLength(1); j++)//1이 x
+                {
+                    if (i < 25)
+                    {
+                        stage.fieldInfo[j, i] = 1;//1은 땅, 및 벽을 의미
+                    }
+                }
+            }
+        }
+
+
+
+
 
     }
 }

@@ -8,6 +8,11 @@ namespace weekproject
 {
     class BossMonster: Monster
     {
-        
+        int[,] _bossPosition = new int[50, 50];
+        public int [,] bossPosition
+        {
+            get {  return _bossPosition; }
+            set { _bossPosition = value; }
+        }
     }
 }

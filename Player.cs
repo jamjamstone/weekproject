@@ -29,12 +29,12 @@ namespace weekproject
             //_projectiles = new List<Projectile>();
             _inventory = new Inventory();
             //
-            _playerProjectile = new Projectile(1,1,2);
+            _playerProjectile = new Projectile(2,1,2);
             _playerProjectile.isShot = false;
             //
             for(int i = 0; i < _projectiles.Length; i++)
             {
-                _projectiles[i] = new Projectile(1,1,2);
+                _projectiles[i] = new Projectile(2,1,2);
                 //_projectiles[i] = _playerProjectile;
                 _projectiles[i].isShot = false;
             }
@@ -172,6 +172,14 @@ namespace weekproject
         public void PlayerHit(Projectile proj)
         {
             _playerStatus.HP = _playerStatus.HP - (proj.Dmg - _playerStatus.def);
+        }
+
+
+
+        public void ResetPlayerPosition()
+        {
+            _playerX= 1;
+            _playerY= 25;
         }
     }
 }

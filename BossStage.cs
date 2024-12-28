@@ -61,7 +61,7 @@ namespace weekproject
        // }
         public override bool isStageEnd()
         {
-            if (_monsters == null)
+            if (BossMonster.MonsterStatus.HP<=0)
             {
                 return true;
             }
@@ -72,11 +72,13 @@ namespace weekproject
         }
         public void EndOfStage(Player player)
         {
+            Console.Clear();
             Console.WriteLine("보스를 쓰러트렸습니다!");
             Console.WriteLine("축하합니다!");
             
             player.PlayerAddItemToInventory(_rewardItem);
             player.PlayerAddGoldToInventory(_rewardGold);
+            Program.isGameRunning = false;
         }
 
     }//end

@@ -96,8 +96,9 @@ namespace weekproject
         {
             _nodes.Add(addMapNode);
             if (_startStage == null)
+
             {
-                Console.WriteLine("1스테이지 설정");
+                //Console.WriteLine("1스테이지 설정");
                 _startStage = addMapNode;
             }
             //_startStage.Nodes.Add(addMapNode);
@@ -151,7 +152,7 @@ namespace weekproject
             player.ResetPlayerPosition();
             foreach (MapNode<T> nextStage in nowStage.Nodes)
             {
-                Console.WriteLine("반복문 진입");
+                //Console.WriteLine("반복문 진입");
 
                 if (nextStage != null)
                 {

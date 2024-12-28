@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace weekproject
+namespace weekproject//보스 피격 시스템이랑 보스 공격이 안됨 
 {
     partial class Game
     {
@@ -16,6 +16,9 @@ namespace weekproject
        
         public void DrawStartWindow()
         {
+            Console.CursorVisible = false;
+            
+            Console.SetCursorPosition(0, 0);
             Console.WriteLine("  ____  _  _   _     \r\n / ___|| || |_| |__  \r\n| |  |_  ..  _| '_ \\ \r\n| |__|_      _| |_) |\r\n \\____||_||_| |_.__/ ");
             Console.WriteLine("Game Start!");
             Console.ReadLine();
@@ -27,8 +30,8 @@ namespace weekproject
             if (stage is ShopStage)//상점이면 업데이트 필요 없음
             {
                 (stage as ShopStage).ShopPlay(player);
-                
-                
+
+
                 return;
             }
             else
@@ -58,8 +61,8 @@ namespace weekproject
                 //
                 //    monster.MonsterAttack();
                 //}
-                
-                    for (int i = stage.fieldInfo.GetLength(0) - 1; i >= 0; i--)//플레이어 위치 추적
+
+                for (int i = stage.fieldInfo.GetLength(0) - 1; i >= 0; i--)//플레이어 위치 추적
                 {
                     for (int j = 0; j < stage.fieldInfo.GetLength(1); j++)
                     {
@@ -73,7 +76,7 @@ namespace weekproject
                         }
                     }
                 }
-                
+
                 for (int k = 0; k < player.projectiles.Length; k++)// 플레이어 투사체 업데이트
                 {
                     if (player.projectiles[k].isShot)//투사체가 발사중이라면
@@ -85,7 +88,7 @@ namespace weekproject
                                 int tempX = player.projectiles[k].projX - 1;
                                 if (stage.fieldInfo[tempX, player.projectiles[k].projY] != 0)//허공이 아니면
                                 {
-                                    if (stage.fieldInfo[tempX, player.projectiles[k].projY] == 1) 
+                                    if (stage.fieldInfo[tempX, player.projectiles[k].projY] == 1)
                                     {
                                         stage.fieldInfo[player.projectiles[k].projX, player.projectiles[k].projY] = 0;
                                         player.projectiles[k].isShot = false;
@@ -108,12 +111,12 @@ namespace weekproject
                         }
                         else
                         {
-                            for (int i = 0; i < player.projectiles[k].Speed; i++)
+                            for (int i = 0; i < player.projectiles[k]?.Speed; i++)
                             {
                                 int tempX = player.projectiles[k].projX + 1;
                                 if (stage.fieldInfo[tempX, player.projectiles[k].projY] != 0)//무언가에 부딫히면
                                 {
-                                    if (stage.fieldInfo[tempX, player.projectiles[k].projY] == 1) 
+                                    if (stage.fieldInfo[tempX, player.projectiles[k].projY] == 1)
                                     {
                                         stage.fieldInfo[player.projectiles[k].projX, player.projectiles[k].projY] = 0;
                                         player.projectiles[k].isShot = false;
@@ -125,7 +128,7 @@ namespace weekproject
                                         stage.fieldInfo[player.projectiles[k].projX, player.projectiles[k].projY] = 0;
                                         player.projectiles[k].projX += 1;
                                     }
-                                        continue;
+                                    continue;
                                 }
                                 else//아닐경우
                                 {
@@ -137,86 +140,189 @@ namespace weekproject
                         }
                     }
                 }
-
-                foreach (Monster monster in stage.monsters)// 몬스터 투사체 업데이트 -> 몬스터 투사체가 설정이 재대로 안됨 이부분 고치면 될듯
+                if (stage is NormalStage)
                 {
-                    Console.WriteLine(monster.MonsterName);
-                    
-                    for (int k = 0; k < monster.projectiles.Length; k++)
+                    foreach (Monster monster in stage.monsters)// 몬스터 투사체 업데이트 -> 몬스터 투사체가 설정이 재대로 안됨 이부분 고치면 될듯
                     {
-                        if (monster.projectiles[k].isShot)//투사체가 발사중이라면
-                        {
-                           // Console.WriteLine("몬스터 투사체 발사중");
-                            if (monster.projectiles[k].IsShotLeft)//왼쪽으로 날아가는 중이면
-                            {
-                                Console.WriteLine(monster.projectiles[k].Speed);
-                                //Console.WriteLine("왼쪽으로 발사");
-                                for (int i = 0; i < monster.projectiles[k].Speed; i++)
-                                {
-                                    //Console.WriteLine("반복1");
-                                    int tempX = monster.projectiles[k].projX - 1;
-                                       if (tempX>0&&stage.fieldInfo[tempX, monster.projectiles[k].projY] != 0)//허공이 아니면//오류
-                                    {
-                                       // Console.WriteLine("경로 방해");
+                       // Console.WriteLine(monster.MonsterName);
 
-                                        if (stage.fieldInfo[tempX, monster.projectiles[k].projY] == 1) 
+                        for (int k = 0; k < monster.projectiles.Length; k++)
+                        {
+                            if (monster.projectiles[k].isShot)//투사체가 발사중이라면
+                            {
+                                // Console.WriteLine("몬스터 투사체 발사중");
+                                if (monster.projectiles[k].IsShotLeft)//왼쪽으로 날아가는 중이면
+                                {
+                                    //Console.WriteLine(monster.projectiles[k].Speed);
+                                    //Console.WriteLine("왼쪽으로 발사");
+                                    for (int i = 0; i < monster.projectiles[k].Speed; i++)
+                                    {
+                                        //Console.WriteLine("반복1");
+                                        int tempX = monster.projectiles[k].projX - 1;
+                                        if (tempX > 0 && stage.fieldInfo[tempX, monster.projectiles[k].projY] != 0)//허공이 아니면//오류
                                         {
-                                           // Console.WriteLine("벽에 만남");
-                                            stage.fieldInfo[monster.projectiles[k].projX, monster.projectiles[k].projY] = 0;
-                                            monster.projectiles[k].isShot = false;
+                                            // Console.WriteLine("경로 방해");
+
+                                            if (stage.fieldInfo[tempX, monster.projectiles[k].projY] == 1)
+                                            {
+                                                // Console.WriteLine("벽에 만남");
+                                                stage.fieldInfo[monster.projectiles[k].projX, monster.projectiles[k].projY] = 0;
+                                                monster.projectiles[k].isShot = false;
+                                            }
+                                            else
+                                            {
+                                                // Console.WriteLine("벽이 아님");
+                                                // monster.projectiles[k].isShot = false;
+                                                stage.fieldInfo[monster.projectiles[k].projX, monster.projectiles[k].projY] = 0;
+                                                monster.projectiles[k].projX -= 1;
+                                            }
+                                            continue;
                                         }
-                                        else
+                                        else//아닐경우
                                         {
-                                           // Console.WriteLine("벽이 아님");
-                                            // monster.projectiles[k].isShot = false;
+                                            //Console.WriteLine("경로 방해 없음");
                                             stage.fieldInfo[monster.projectiles[k].projX, monster.projectiles[k].projY] = 0;
                                             monster.projectiles[k].projX -= 1;
-                                        }
-                                        continue;
-                                    }
-                                    else//아닐경우
-                                    {
-                                        //Console.WriteLine("경로 방해 없음");
-                                        stage.fieldInfo[monster.projectiles[k].projX, monster.projectiles[k].projY] = 0;
-                                        monster.projectiles[k].projX -= 1;
 
+                                        }
                                     }
                                 }
-                            }
-                            else//오른쪽으로 날아가는 중이면
-                            {
-                                for (int i = 0; i < monster.projectiles[k].Speed; i++)
+                                else//오른쪽으로 날아가는 중이면
                                 {
-                                    int tempX = monster.projectiles[k].projX + monster.projectiles[k].Speed;
-                                    if (stage.fieldInfo[tempX, player.projectiles[k].projY] != 0)//벽에 부딫히면
+                                    for (int i = 0; i < monster.projectiles[k].Speed; i++)
                                     {
-                                        if (stage.fieldInfo[tempX, monster.projectiles[k].projY] == 1) 
+                                        int tempX = monster.projectiles[k].projX + monster.projectiles[k].Speed;
+                                        if (stage.fieldInfo[tempX, player.projectiles[k].projY] != 0)//벽에 부딫히면
                                         {
-                                            stage.fieldInfo[monster.projectiles[k].projX, monster.projectiles[k].projY] = 0;
-                                            monster.projectiles[k].isShot = false;
+                                            if (stage.fieldInfo[tempX, monster.projectiles[k].projY] == 1)
+                                            {
+                                                stage.fieldInfo[monster.projectiles[k].projX, monster.projectiles[k].projY] = 0;
+                                                monster.projectiles[k].isShot = false;
+                                            }
+                                            else
+                                            {
+                                                //monster.projectiles[k].isShot = false;
+                                                stage.fieldInfo[monster.projectiles[k].projX, monster.projectiles[k].projY] = 0;
+                                                monster.projectiles[k].projX += 1;
+                                            }
+                                            continue;
                                         }
-                                        else
+                                        else//아닐경우
                                         {
-                                            //monster.projectiles[k].isShot = false;
                                             stage.fieldInfo[monster.projectiles[k].projX, monster.projectiles[k].projY] = 0;
                                             monster.projectiles[k].projX += 1;
+                                            // Console.WriteLine(monster.projectiles[k].projX);
+                                            // Console.WriteLine("몬스터 공격");
                                         }
-                                        continue;
-                                    }
-                                    else//아닐경우
-                                    {
-                                        stage.fieldInfo[monster.projectiles[k].projX, monster.projectiles[k].projY] = 0;
-                                        monster.projectiles[k].projX += 1;
-                                       // Console.WriteLine(monster.projectiles[k].projX);
-                                       // Console.WriteLine("몬스터 공격");
                                     }
                                 }
+
                             }
 
                         }
-                    
                     }
                 }
+                if (stage is BossStage)//보스스테이지시
+                {
+                    for (int k = 0; k < (stage as BossStage).BossMonster.projectiles.Length; k++)// 보스 투사체 업데이트//(stage as BossStage).BossMonster.projectiles.Length
+                    {
+                        if ((stage as BossStage).BossMonster.projectiles[k].isShot)//투사체가 발사중이라면
+                        {
+                            if ((stage as BossStage).BossMonster.projectiles[k].IsShotLeft)//왼쪽으로 날아가는 중이면
+                            {
+                                for (int i = 0; i < (stage as BossStage).BossMonster.projectiles[k].Speed; i++)
+                                {
+                                    int tempX = (stage as BossStage).BossMonster.projectiles[k].projX - 1;
+                                    if (stage.fieldInfo[tempX, (stage as BossStage).BossMonster.projectiles[k].projY] != 0)//허공이 아니면
+                                    {
+                                        if (stage.fieldInfo[tempX, (stage as BossStage).BossMonster.projectiles[k].projY] == 1)
+                                        {
+                                            stage.fieldInfo[(stage as BossStage).BossMonster.projectiles[k].projX, (stage as BossStage).BossMonster.projectiles[k].projY] = 0;
+                                            (stage as BossStage).BossMonster.projectiles[k].isShot = false;
+                                        }
+                                        else
+                                        {
+                                            //player.projectiles[k].isShot = false;
+                                            stage.fieldInfo[(stage as BossStage).BossMonster.projectiles[k].projX, (stage as BossStage).BossMonster.projectiles[k].projY] = 0;
+                                            (stage as BossStage).BossMonster.projectiles[k].projX -= 1;
+                                        }
+                                        continue;
+                                    }
+                                    else//아닐경우
+                                    {
+                                        stage.fieldInfo[(stage as BossStage).BossMonster.projectiles[k].projX, (stage as BossStage).BossMonster.projectiles[k].projY] = 0;
+                                        (stage as BossStage).BossMonster.projectiles[k].projX -= 1;
+
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                for (int i = 0; i < (stage as BossStage).BossMonster.projectiles[k].Speed; i++)//(stage as BossStage).BossMonster.projectiles[k]
+                                {
+                                    int tempX = (stage as BossStage).BossMonster.projectiles[k].projX + 1;
+                                    if (stage.fieldInfo[tempX, (stage as BossStage).BossMonster.projectiles[k].projY] != 0)//무언가에 부딫히면
+                                    {
+                                        if (stage.fieldInfo[tempX, (stage as BossStage).BossMonster.projectiles[k].projY] == 1)
+                                        {
+                                            stage.fieldInfo[(stage as BossStage).BossMonster.projectiles[k].projX, (stage as BossStage).BossMonster.projectiles[k].projY] = 0;
+                                            (stage as BossStage).BossMonster.projectiles[k].isShot = false;
+                                        }
+                                        else
+                                        {
+
+                                            //player.projectiles[k].isShot = false;
+                                            stage.fieldInfo[(stage as BossStage).BossMonster.projectiles[k].projX, (stage as BossStage).BossMonster.projectiles[k].projY] = 0;
+                                            (stage as BossStage).BossMonster.projectiles[k].projX += 1;
+                                        }
+                                        continue;
+                                    }
+                                    else//아닐경우
+                                    {
+                                        stage.fieldInfo[(stage as BossStage).BossMonster.projectiles[k].projX, (stage as BossStage).BossMonster.projectiles[k].projY] = 0;
+                                        (stage as BossStage).BossMonster.projectiles[k].projX += 1;
+                                    }
+                                }
+
+                            }
+                        }
+                    }
+
+                    for (int k = 0; k < (stage as BossStage).BossMonster.projects2.Length; k++)// 보스 투사체 업데이트//(stage as BossStage).BossMonster.projectiles.Length
+                    {
+                        if ((stage as BossStage).BossMonster.projects2[k].isShot)//투사체가 발사중이라면
+                        {
+
+                            for (int i = 0; i < (stage as BossStage).BossMonster.projects2[k].Speed; i++)
+                            {
+                                int tempY = (stage as BossStage).BossMonster.projects2[k].projY - 1;
+                                if (stage.fieldInfo[(stage as BossStage).BossMonster.projects2[k].projX,tempY] != 0)//허공이 아니면
+                                {
+                                    if (stage.fieldInfo[ (stage as BossStage).BossMonster.projects2[k].projX,tempY] == 1)
+                                    {
+                                        stage.fieldInfo[(stage as BossStage).BossMonster.projects2[k].projX, (stage as BossStage).BossMonster.projects2[k].projY] = 0;
+                                        (stage as BossStage).BossMonster.projects2[k].isShot = false;
+                                    }
+                                    else
+                                    {
+                                        
+                                        stage.fieldInfo[(stage as BossStage).BossMonster.projects2[k].projX, (stage as BossStage).BossMonster.projects2[k].projY] = 0;
+                                        (stage as BossStage).BossMonster.projects2[k].projY -= 1;
+                                    }
+                                    continue;
+                                }
+                                else//아닐경우
+                                {
+                                    stage.fieldInfo[(stage as BossStage).BossMonster.projects2[k].projX, (stage as BossStage).BossMonster.projects2[k].projY] = 0;
+                                    (stage as BossStage).BossMonster.projects2[k].projY -= 1;
+
+                                }
+                            }
+
+
+                        }
+                    }
+                }//보스 공격 업데이트 끝
             }
 
             SetPlayerPositionToField(stage, player);
@@ -251,6 +357,36 @@ namespace weekproject
                     }
                 }
             }
+            if (stage is BossStage)
+            {
+                foreach (var proj in (stage as BossStage).BossMonster.projectiles)
+                {
+                    if (proj.isShot && proj.projX > 0)
+                    {
+
+                        //Console.WriteLine("몬스터 투사체 표시");
+                        stage.fieldInfo[proj.projX, proj.projY] = 6;
+                    }
+                    else if (proj.projX <= 0)
+                    {
+                        proj.isShot = false;
+                    }
+                }
+                foreach (var proj in (stage as BossStage).BossMonster.projects2)
+                {
+                    if (proj.isShot && proj.projY > 0)
+                    {
+
+                        //Console.WriteLine("몬스터 투사체 표시");
+                        stage.fieldInfo[proj.projX, proj.projY] = 6;
+                    }
+                    else if (proj.projY <= 0)
+                    {
+                        proj.isShot = false;
+                    }
+                }
+            }
+
             SetMonsterPositionToField(stage);
             stage.DrawMap();
 
@@ -300,8 +436,8 @@ namespace weekproject
                     {
                         if (proj.isShot)
                         {
-                            Console.WriteLine("몬스터가 맞음");
-                            monster.MonsterHit(proj);
+                           // Console.WriteLine("몬스터가 맞음");
+                            monster.MonsterHit(proj,player);
                             proj.isShot = false;
                         }
                     }
@@ -341,12 +477,40 @@ namespace weekproject
                         {
                             if (bossStage.fieldInfo[j, i] == 7 && j == proj.projX && i == proj.projY)
                             {
-                                bossStage.BossMonster.MonsterHit(proj);
+                                bossStage.BossMonster.MonsterHit(proj,player);
+                                proj.isShot = false;
                             }
                         }
                     }
 
 
+                }
+            }
+
+            foreach (var proj in bossStage.BossMonster.projectiles)//monster projectiles
+            {
+                if (player.playerX == proj.projX && player.playerY == proj.projY)
+                {
+                    if (proj.isShot)
+                    {
+                        player.PlayerHit(proj);
+                        //Console.WriteLine(player.PlayerStatus.HP);
+                        proj.isShot = false;
+                        return;
+                    }
+                }
+            }
+            foreach (var proj in bossStage.BossMonster.projects2)//monster projectiles
+            {
+                if (player.playerX == proj.projX && player.playerY == proj.projY)
+                {
+                    if (proj.isShot)
+                    {
+                        player.PlayerHit(proj);
+                        //Console.WriteLine(player.PlayerStatus.HP);
+                        proj.isShot = false;
+                        return;
+                    }
                 }
             }
         }
@@ -373,9 +537,9 @@ namespace weekproject
                 {
                     stage.fieldInfo[monster.monsterX, monster.monsterY] = 0;
                     stage.monsters.Remove(monster);
-                    Console.WriteLine("몬스터 제거");
-                    Console.WriteLine(monster.monsterX);
-                    Console.WriteLine(monster.monsterY);
+                    //Console.WriteLine("몬스터 제거");
+                    //Console.WriteLine(monster.monsterX);
+                    //Console.WriteLine(monster.monsterY);
                 }
             }
 
@@ -417,8 +581,8 @@ namespace weekproject
             normalMonster.MonsterProjectile = new Projectile(2, 1, 0);
             //몬스터 설정
             //스테이지 설정
-            Monster boss1 = new BossMonster();
-            Monster boss2 = new BossMonster();
+            Monster bossMonster1 = new BossMonster();
+            Monster bossMonster2 = new BossMonster();
 
             Stage battle1 = new NormalStage();
             Stage battle2 = new NormalStage();
@@ -430,7 +594,17 @@ namespace weekproject
             (battle4 as NormalStage).SetRewardGold();
             Stage Boss1 = new BossStage();
             Stage Boss2 = new BossStage();
+            bossMonster1.MonsterStatus.HP = 30;
+            bossMonster1.MonsterStatus.def = 2;
+            bossMonster1.MonsterStatus.ATK= 5;
+            (bossMonster1 as BossMonster).bossType = 1; 
+            bossMonster2.MonsterStatus.HP= 10;
+            bossMonster2.MonsterStatus.def= 2;
+            bossMonster2.MonsterStatus.ATK= 10;
+            (bossMonster1 as BossMonster).bossType = 2;
 
+            (Boss1 as BossStage).BossMonster = bossMonster1 as BossMonster;
+            (Boss2 as BossStage).BossMonster = bossMonster2 as BossMonster;
             battle1.AddMonster(normalMonster);//1은 튜토리얼 스테이지로 조작법을 맵 위에 뛰울 예정, set커서로 배경그리고 커서 이동시켜서 조작법 출력하면 될듯
             battle1.monsters[0].SetMonsterXY(35, 25);
             // battle1.monsters[0].projectiles[0].Speed = 1;
@@ -448,13 +622,13 @@ namespace weekproject
             SetBaseField(battle3);
             SetBaseField(battle4);
             SetBaseField(Boss1);
-            SetBaseField(Boss2);
+           // SetBaseField(Boss2);
             //스테이지 설정하기 
             SetBattle2(battle2);
             SetBattle3(battle3);
             SetBattle4(battle4);
             SetBoss1(Boss1);
-
+            //SetBoss2(Boss2);
             //스테이지 설정하기
             worldMap.AddNode(new MapNode<Stage>(battle1));//0
             worldMap.AddNode(new MapNode<Stage>(battle2));//1
@@ -462,7 +636,7 @@ namespace weekproject
             worldMap.AddNode(new MapNode<Stage>(battle4));//3
             worldMap.AddNode(new MapNode<Stage>(shop1));//4
             worldMap.AddNode(new MapNode<Stage>(Boss1));//5
-            worldMap.AddNode(new MapNode<Stage>(Boss2));//6
+            //worldMap.AddNode(new MapNode<Stage>(Boss2));//6
           //worldMap.StartStage = new MapNode<Stage>(battle1);
 
             //트리 구조 생성중
@@ -513,18 +687,18 @@ namespace weekproject
                         break;
                 }
             }
+            worldMap.SetTreeLine(worldMap.nodes[4], worldMap.nodes[5]);
 
-            
-            switch (Program.random.Next(1, 3))//랜덤하게 보스스테이지랑 연결
-            {
-                case 1:
-                    worldMap.SetTreeLine(worldMap.nodes[4], worldMap.nodes[5]);
-                    break;
-                case 2:
-                    worldMap.SetTreeLine(worldMap.nodes[4], worldMap.nodes[6]);
-                    break;
-                
-            }
+            //switch (Program.random.Next(1, 3))//랜덤하게 보스스테이지랑 연결
+            //{
+            //    case 1:
+            //        worldMap.SetTreeLine(worldMap.nodes[4], worldMap.nodes[6]);//원래는5
+            //        break;
+            //    case 2:
+            //        worldMap.SetTreeLine(worldMap.nodes[4], worldMap.nodes[6]);
+            //        break;
+            //    
+            //}
             //worldMap.AddNode(battle2, 1);
             //worldMap.AddNode(battle3, 1);
             //worldMap.AddNode(battle4, 2);
@@ -617,15 +791,23 @@ namespace weekproject
                 {
                     foreach (var monster in nowMapNode.stage.monsters)
                     {
-                        Console.WriteLine(monster.MonsterName);
+                        //Console.WriteLine(monster.MonsterName);
                         monster.MonsterAttack();
                     }
                     Program.monsterAttackTimer.Restart();
                 }
                 if (Program.monsterAttackTimer.ElapsedMilliseconds > 1000 && nowMapNode.stage is BossStage)
                 {
-                    (nowMapNode.stage as BossStage).BossMonster.BossAttack1(player);
-                    (nowMapNode.stage as BossStage).BossMonster.BossAttack2(player);
+                    //if ((nowMapNode.stage as BossStage).BossMonster.bossType == 1)
+                    //{
+                        (nowMapNode.stage as BossStage).BossMonster.BossAttack1(player);
+                        (nowMapNode.stage as BossStage).BossMonster.BossAttack2(player);
+                    //}
+                    //else if ((nowMapNode.stage as BossStage).BossMonster.bossType == 2)
+                    //{
+                    //    (nowMapNode.stage as BossStage).BossMonster.BossAttack2(player);
+                    //    (nowMapNode.stage as BossStage).BossMonster.BossAttack2(player);
+                    //}
                     Program.monsterAttackTimer.Restart();
                 }
                 //Console.WriteLine(nowMapNode.stage.stageName);
@@ -634,8 +816,9 @@ namespace weekproject
                     if ((nowMapNode.stage as ShopStage).isStageEnd())
                     {
                         worldMap.NextStageSelect(ref nowMapNode, player);
-                        
-                        Console.WriteLine(nowMapNode.stage.stageName);
+                        Program.monsterAttackTimer.Restart();
+                        Program.stopwatch.Restart();
+                       // Console.WriteLine(nowMapNode.stage.stageName);
                     }
                 }
 
@@ -647,9 +830,12 @@ namespace weekproject
                         worldMap.NextStageSelect(ref nowMapNode,player);
                         Program.monsterAttackTimer.Restart();
                         Program.stopwatch.Restart();
-                        Console.WriteLine("스테이지 클리어!");
-                        Console.WriteLine(nowMapNode.stage.stageName);
-
+                        //Console.WriteLine("스테이지 클리어!");
+                       // Console.WriteLine(nowMapNode.stage.stageName);
+                        foreach(Projectile proj in player.projectiles)
+                        {
+                            proj.isShot = false;
+                        }
                     }
 
 
@@ -659,10 +845,10 @@ namespace weekproject
                 {
                     if ((nowMapNode.stage as BossStage).isStageEnd())
                     {
-                        worldMap.NextStageSelect(ref nowMapNode, player);
+                       // worldMap.NextStageSelect(ref nowMapNode, player);
                         Program.monsterAttackTimer.Restart();
                         Program.stopwatch.Restart();
-                        Console.WriteLine(nowMapNode.stage.stageName);
+                        //Console.WriteLine(nowMapNode.stage.stageName);
                         (nowMapNode.stage as BossStage).EndOfStage(player);
                         Console.WriteLine("Game Clear!");
 

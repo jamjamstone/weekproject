@@ -47,7 +47,7 @@ namespace weekproject
         public void BuyItemFromPlayer(Player player,int index)//말그대로 구매기능만 판매 대화나 판매가능 여부는 다른 함수에 구현하기
         {
             
-            if (_shopGold > player.Inventory.getGold)
+            if (_shopGold > player.Inventory.getItems[index].price)
             {
                 int temp = _shopGold;
                 _shopGold = _shopGold - player.Inventory.getGold;
@@ -99,7 +99,7 @@ namespace weekproject
             Console.WriteLine(Program.merchant);
             ShowItems();
             Console.SetCursorPosition(0, 45);
-            Console.WriteLine("구매는 b, 판매는 s 를 누르세요");
+            Console.WriteLine("구매는 b, 판매는 s, 상점을 나가려면 q 를 누르세요");
         }
         public void ShowItems()
         {

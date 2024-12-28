@@ -87,9 +87,9 @@ namespace weekproject
            
         }
 
-        public void MonsterHit(Projectile proj)
+        public void MonsterHit(Projectile proj,Player player)
         {
-            _monsterStatus.HP = _monsterStatus.HP - (proj.Dmg - _monsterStatus.def);
+            _monsterStatus.HP = _monsterStatus.HP - (proj.Dmg+player.PlayerStatus.ATK - _monsterStatus.def);
         }
 
         public void SetMonsterXY(int x, int y)

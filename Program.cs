@@ -11,7 +11,7 @@ namespace weekproject
     /// 무한 점프 시스템 -> 고쳤다! 점프 카운트는 최대치에 올라가면 0이 되므로 공중에서 w키를 누르면 계속해서 점프카운트가 보충된다!
     /// 상점으로 넘어가야 하는데 자꾸 노말 스테이지가 실행됨 이걸 막아야 함
     /// 2번몹은 공격을 안함-> 2번몹 투사체 스피드가 0으로 설정되있음!
-    /// 
+    /// 보스 공격만 구현하면 끝!
     /// </summary>
     internal class Program
     {
@@ -27,7 +27,7 @@ namespace weekproject
         static void Main(string[] args)
         {
             Console.SetWindowSize(Console.LargestWindowWidth, Console.LargestWindowHeight);
-            
+            Console.SetWindowPosition(0,0);
             Game game = new Game();
             game.Play();
             //Console.SetWindowPosition(5,5);

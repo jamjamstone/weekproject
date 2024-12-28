@@ -82,14 +82,14 @@ namespace weekproject
             {
                 if (monster.MonsterName == "슬라임")
                 {
-                    Console.WriteLine(monster.monsterX);
-                    Console.WriteLine(monster.monsterY);
+                    //Console.WriteLine(monster.monsterX);
+                    //Console.WriteLine(monster.monsterY);
                     stage.fieldInfo[monster.monsterX, monster.monsterY] = 4;
                 }
                 else
                 {
-                    Console.WriteLine(monster.monsterX);
-                    Console.WriteLine(monster.monsterY);
+                    //Console.WriteLine(monster.monsterX);
+                    //Console.WriteLine(monster.monsterY);
                     
                     stage.fieldInfo[monster.monsterX, monster.monsterY] = 5;
                 }
@@ -354,9 +354,9 @@ namespace weekproject
                 {
                     if (j > 38 && i < 35)
                     {
-                        stage.fieldInfo[j, i] = 7;//1은 땅, 및 벽을 의미
+                        stage.fieldInfo[j, i] = 7;//1은 땅, 및 벽을 의미 7은 보스의 몸을 의미
                     }
-                    if (i>=35&&j+i==39+34)
+                    if (i>=35&&j+i>39+34)
                     {
                         stage.fieldInfo[j, i] = 7;
                     }
@@ -371,10 +371,18 @@ namespace weekproject
             {
                 for (int j = 0; j < stage.fieldInfo.GetLength(1); j++)//1이 x
                 {
-                    if (i < 25)
+                    if (j > 2 && i > 1)
                     {
-                        stage.fieldInfo[j, i] = 1;//1은 땅, 및 벽을 의미
+                        stage.fieldInfo[j, i] = 0;//1은 땅, 및 벽을 의미//23,30  33,30 28,34 28,26
                     }
+                    if (23 <= j&&j<=33&&26<=i&&i<=34)//23,30 28,34//33,30   28,26
+                    {
+                        if (-5*i+4*j<=4*30-5*23&& 5 * i + 4 * j >= 4 * 30 - 5 * 23&& 5 * i + 4 * j >= 4 * 30 - 5 * 23+(8) && -5 * i + 4 * j <= 4 * 30 - 5 * 23-(8))
+                        {
+                            stage.fieldInfo[j, i] = 7;
+                        }
+                    }
+
                 }
             }
         }

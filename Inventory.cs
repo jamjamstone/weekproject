@@ -52,6 +52,10 @@ namespace weekproject
             Status sumStatus= new Status();
             foreach (Item item in _getItems)
             {
+                if(item == null)
+                {
+                    continue;
+                }
                 sumStatus.HP += item.status.HP;
                 sumStatus.def += item.status.def;
                 sumStatus.ATK += item.status.ATK;
